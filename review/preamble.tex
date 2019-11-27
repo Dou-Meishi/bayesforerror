@@ -1,0 +1,167 @@
+%% -*- coding: utf-8 -*-
+%% genearl config of article document class
+
+%% encoding
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+%% font select
+\usepackage[tbtags]{amsmath}
+\usepackage{unicode-math}
+    \setmathfont{Libertinus Math}
+    \setmathfont{XITS Math}[StylisticSet={1},range=cal]
+    \unimathsetup{math-style=ISO, bold-style=ISO}
+\usepackage[fontset=none,zihao=5,heading=false]{ctex}
+    \ctexset{contentsname={Contents},today=old}
+    \setCJKmainfont[BoldFont={SimHei}, ItalicFont={STKaiti}]{NSimSun}
+    \setCJKsansfont[BoldFont={Microsoft YaHei Bold}]{Microsoft YaHei Light}
+    \setCJKmonofont{Microsoft YaHei Light}
+    \defaultCJKfontfeatures{Scale=0.962216}
+    \setmainfont[BoldFont={El Messiri Bold},
+                 SmallCapsFont={Andada SC},
+                 ItalicFont={Economica Italic},
+                 BoldItalicFont={Economica Italic}]{Libertinus Serif}
+    \setsansfont[BoldFont={El Messiri Bold},
+                 ItalicFont={Economica Italic},
+                 BoldItalicFont={Economica Italic}]{Libertinus Sans}
+    \setmonofont{Inconsolata}
+
+%% figure and table
+\usepackage{graphicx}
+\usepackage{subcaption}
+%% \usepackage{wrapfig}
+%% \usepackage{tcolorbox}
+%% \usepackage{adjustbox}
+%% \usepackage{rotating}
+\usepackage{booktabs}
+%% \usepackage{longtable}
+%% \usepackage{colortbl}
+%% \usepackage{makecell}
+%% \usepackage{diagbox}
+%% \usepackage{multirow}
+%% \usepackage{paralist}
+%% \usepackage{tabularx}
+%% \usepackage{array}
+%% \usepackage[labelsep=period, labelfont=bf]{caption}
+%% \usepackage[section]{placeins}
+%% \usepackage{afterpage}
+
+%% frequently used packages
+\usepackage{xcolor}
+
+\usepackage{hyperref}
+    \definecolor{linkcolor}{rgb}{0,.145,.698}
+    \definecolor{urlcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+    \hypersetup{urlcolor=urlcolor,
+                linkcolor=linkcolor,
+                citecolor=citecolor,
+                pagebackref=true,
+                menucolor=black,
+                letterpaper=true,
+                breaklinks=true,
+                colorlinks
+}
+
+\usepackage[sorting=nyt]{biblatex}
+\usepackage{siunitx}
+    \sisetup{output-decimal-marker = .,
+             per-mode = symbol,
+             binary-units = true,
+             separate-uncertainty = true
+}
+\usepackage{geometry}
+    \geometry{verbose, a4paper}
+    \geometry{left=25mm, right=25mm, top=35mm, bottom=25mm}
+
+\usepackage{fancyhdr}
+    \pagestyle{fancy}
+    \fancyhf{}
+    \makeatletter
+    \renewcommand{\title}[1]{\gdef\@title{#1}\gdef\titlestring{#1}}
+    \renewcommand{\maketitle}{\newpage\null\thispagestyle{plain}
+    \vskip1em\noindent{\Huge\titlestring}\vskip3em}
+    \makeatother
+    \renewcommand{\headrulewidth}{0pt}
+    \fancyhead[L]{\today}
+    \fancyhead[RO]{\textsc{\titlestring}\hskip1.5em\arabic{page}}
+
+\usepackage[shortlabels]{enumitem}
+    \setlist{noitemsep, topsep=5pt plus 2pt minus 3pt}
+
+%% Misc
+\usepackage{microtype}
+\usepackage{textcomp}           % for package siunitx
+%% \usepackage{xparse}
+%% \usepackage{csquotes}
+%% \usepackage[toc,page]{appendix}
+%% \usepackage[bottom]{footmisc}
+%% \usepackage{fancyhdr}
+%% \usepackage{lastpage}
+%% \usepackage{multicol}
+%% \usepackage{fancyhdr}
+%% \usepackage{IEEEtrantools}
+%% \usepackage{listings}           % try using tocolorbox instead
+
+
+%% --------------------
+%%   CMD DEFINITION
+%% --------------------
+
+\renewcommand\arraystretch{1.3} % baselineskip
+
+%% symbol expression
+\def\mlead{\Longrightarrow}
+\def\mleadd{\Rightarrow}
+\def\mequiv{\Longleftrightarrow}
+\def\mdis{\displaystyle}
+\def\mdif{\mathrm{d}}
+\newcommand*{\dmsNN}{\char"2115\relax}
+\newcommand\mderiv[2]{\frac{\mathrm{d}#1}{\mathrm{d}#2}}
+\newcommand\mpderi[2]{\frac{\partial#1}{\partial #2}}
+\newcommand*{\dmsbar}[1]{\mkern1.5mu\overline{\mkern-1.5mu#1\mkern-1.5mu}\mkern1.5mu}
+
+\usepackage{tcolorbox}
+\tcbuselibrary{listings, breakable, xparse}
+
+\DeclareTotalTCBox{\inlinecode}{O{python} v}
+{verbatim,colback=white,colframe=white}
+{\lstinline[language=#1, keywordstyle=\color{cyan}\bfseries]^#2^}
+
+%% \DeclareTCBInputListing{\inputcode}{O{[latex]tex} m !O{}}{
+%%  fonttitle=\bfseries, 
+%%  colback=yellow!5,colframe=yellow!50!black,listing only,
+%%  before skip=0.5cm, after skip=0.5cm,
+%%  breakable,left=10mm, listing inputencoding=utf8,
+%%  listing file={#2}, listing options={
+%%         language={#1},
+%%         basicstyle=\scriptsize\ttfamily, 
+%%         keywordstyle=\color{orange},       % core keywords
+%%         keywordstyle={[2]\color{purple}}, % built-ins
+%%         stringstyle=\color{teal}\ttfamily,
+%%         commentstyle=\color{gray},
+%%         upquote=true,                      % requires textcomp
+%%         lineskip=-2pt,
+%%         numbers=left,
+%%         numberstyle=\small\color{red!75!black}}, #3
+%% }
+
+%% \newtcblisting{mycode}[2][python]{%
+%%     fonttitle = \Large\bfseries,
+%%     colback=yellow!5,colframe=yellow!50!black,listing only,
+%%     before skip=0.5cm, after skip=0.5cm, 
+%%     breakable,left=10mm,title = #2,
+%%     listing options={
+%%         language=#1,
+%%         basicstyle=\normalsize\ttfamily, 
+%%         keywordstyle=\color{orange},       % core keywords
+%%         keywordstyle={[2]\color{purple}}, % built-ins
+%%         stringstyle=\color{teal}\ttfamily,
+%%         commentstyle=\color{gray},
+%%         upquote=true,                      % requires textcomp
+%%         lineskip=-2pt,
+%%         numbers=left,
+%%         numberstyle=\small\color{red!75!black}
+%% }}
+
+\endinput

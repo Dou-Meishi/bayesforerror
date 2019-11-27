@@ -3,17 +3,20 @@
 #+Author: Dou Meishi
 #+STARTUP: indent
 #+STARTUP: overview
+#+OPTIONS: tex:t
 
 + review/
+
   目前主要是对文献 PRC2015 的笔记。
   + preamble.tex
 	导言区：页面格式，字体选择，各种用途宏包的载入及配置。
   + Review.tex
 	正文区。
 + code/
+
   目前主要是对文献 PRC2015 中数值计算结果的重复
   + tab2.py
 	对 TABEL. II 结果的复现，输出顺序为从左到右，从上到下。
   + tab3-1.py
-	对 TABEL. III 中部分结果 $C_\epsilon^{(1)}$ 的复现。
+	对 TABEL. III 中部分结果 \(C_{\epsilon}^{(1)}\) 的复现。
 	输出顺序为从上到下，从左到右。

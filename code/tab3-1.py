@@ -6,10 +6,9 @@ from scipy.integrate import quad, nquad
 from scipy.optimize import root_scalar
 
 k = 2
-n_c = 3
 cbar_le = .001
 cbar_ge = 1000
-limit = 50
+limit = 50                      # arg passed to scipy.integrate.quad()
 
 def find_width(p, pr, *, bound=1):
     '''
@@ -19,6 +18,7 @@ def find_width(p, pr, *, bound=1):
     Return d.
     '''
     integral = lambda d: 2*quad(pr, 0, d)[0]
+    D = integral(bound)
     t, max_t = (0, 1000)
     while p >= integral(bound) and t < max_t:
         t += 1
@@ -32,7 +32,7 @@ def find_width(p, pr, *, bound=1):
         is {prb} while given probability is {p}'.format(
             d=bound, prb=integral(bound), p=p))
 
-def _dkp_eps(p, pr_cn_if_cbar, pr_cbar, *, Q, cns, limit=50):
+def _dkp_eps(p, pr_cn_if_cbar, pr_cbar, *, Q, cns, limit=limit):
     def pr_delta(delta):
         def numerator_f(cbar):
             y = pr_cn_if_cbar(delta/Q**(k+1), cbar)
@@ -50,20 +50,13 @@ def _dkp_eps(p, pr_cn_if_cbar, pr_cbar, *, Q, cns, limit=50):
     return find_width(p, pr_delta, bound=Q**(k+1))
 
 
-def pr_cn_if_cbar(cn, cbar, *, Set='C'):
-    if Set == 'C':
-        return np.exp(-1/2 * cn**2/cbar**2)/np.sqrt(2*np.pi)/cbar
-    else:
-        raise Exception('No priors given! Please select a set.')
+def pr_cn_if_cbar(cn, cbar):
+    return np.exp(-1/2 * cn**2/cbar**2)/np.sqrt(2*np.pi)/cbar
 
-def pr_cbar(cbar, *, Set='C'):
-    if Set == 'C':
-        theta = lambda x:np.heaviside(x,0)
-        return 1/cbar/np.log(cbar_ge/cbar_le) * theta(
+def pr_cbar(cbar):
+    theta = lambda x:np.heaviside(x,0)
+    return 1/cbar/np.log(cbar_ge/cbar_le) * theta(
             cbar-cbar_le)* theta(cbar_ge-cbar)
-    else:
-        raise Exception('No priors given! Please select a set.')
-
 
 def main():
     for cns in [[1., 1., 1.], [1., .5, .1], [1., .1, .1]]:

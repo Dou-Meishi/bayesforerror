@@ -1,9 +1,15 @@
 \documentclass[12pt]{article}
 \input{preamble}
+
 \newcommand*\dmspr{\textrm{pr}}
 \newcommand*\dmsvat[3][\big]{#1|_{\raise3pt\hbox{$\scriptstyle#2$}}^{\lower3pt\hbox{$\scriptstyle#3$}}}
+
+
 \def\dmscbar{\dmsbar{c}}
 \def\dmsccck{c_0,c_1,\ldots,c_k}
+\def\dmsccch{c_{k+1},c_{k+2},\ldots,c_{k+h}}
+\def\dmsdifccch{\dmsdif c_{k+1}\dmsdif c_{k+2}\cdots\dmsdif c_{k+h}}
+\def\dmsdeltakh{\Delta_k^{(h)}}
 \def\dmsdeltako{\Delta_k^{(1)}}
 \def\dmsdkp{d_k^{(p)}}
 
@@ -12,261 +18,19 @@
 \maketitle
 \tableofcontents
 
-\section{Mathematical Expression of the Problem}
-假定可观测量 $X$ 有级数展开式 $X=\sum c_nQ^n$，
-记 $k$ 阶截断误差为
-\begin{equation}
-  \Delta_k\equiv\sum_{n=k+1}^\infty c_nQ^n
-\end{equation}
-欲求 $\dmspr(\Delta_k|\dmsccck)$.
+\input{section---Mathematical-Expression-of-the-Problem}
 
-\section{Assumptions and Priors}
-\begin{enumerate}[i)]
-\item $c_n$ 可视为某个上界 $\dmscbar$ 给定后的随机变量，
-  $c_n$ 彼此独立，而且服从同一个概率分布 $\dmspr(c_n|\dmscbar)$.
-\item 从不同的先验信息出发可导出 $\dmspr(c_n|\dmscbar)$,
-  $\dmspr(\dmscbar)$. \autoref{tab:1} 已列出三种用于讨论。
-\end{enumerate}
+\input{section---Assumptions-and-Priors}
 
-\section{General Formula of the First-term Approximation}
-考虑 $\Delta\approx\Delta_k^{(1)}\equiv c_{k+1}Q^{k+1}$ 的情形，
-从等式
-\begin{equation}
-  \label{eq:1}
-  \dmspr(\dmsdeltako|\dmsccck)=
-  \int\dmspr(\dmsdeltako|\dmsccck,c_{k+1})
-  \dmspr(c_{k+1}|\dmsccck)\mdif c_{k+1}
-\end{equation}
-出发，
-分别计算积分式中的两项如下，
-\begin{equation}
-  \label{eq:2}
-  \begin{aligned}
-    \dmspr(\dmsdeltako|\dmsccck,c_{k+1}) &=
-    \dmspr(\dmsdeltako|c_{k+1}) \\
-    &= \delta(\dmsdeltako-c_{k+1}Q^{k+1})\\
-    &= \frac{1}{Q^{k+1}}\delta\biggl(c_{k+1}-
-    \frac{\dmsdeltako}{Q^{k+1}}\biggr)
-  \end{aligned}
-\end{equation}
-\begin{equation}
-  \label{eq:3}
-  \begin{aligned}
-    \dmspr(c_{k+1}|\dmsccck) &= \int\dmspr(c_{k+1}|\dmsccck,\dmscbar)
-    \dmspr(\dmscbar|\dmsccck)\mdif\dmscbar \\
-    &= \int\dmspr(c_{k+1}|\dmscbar) \frac{\dmspr(\dmsccck|\dmscbar)
-      \dmspr(\dmscbar)}{\dmspr(\dmsccck)}\mdif\dmscbar \\
-    &= \frac{\int\dmspr(c_{k+1}|\dmscbar)\dmspr(\dmsccck|\dmscbar)
-      \dmspr(\dmscbar)\mdif\dmscbar}{
-    \int\dmspr(\dmsccck|\dmscbar)\dmspr(\dmscbar)\mdif\dmscbar}
-  \end{aligned}
-\end{equation}
-分子分母中的 $\dmscbar$ 是积分变量，并不相同。
-此外，
-$\dmscbar$ 的积分区间是 $(0,+\infty)$，
-而 $c_{k+1}$ 的积分区间时 $(-\infty,+\infty)$。
-有时会先将 $\dmscbar$ 的积分区间取为 $(\epsilon,1/\epsilon)$，
-计算完成后再令 $\epsilon \to 0^+$.
-Eq~\eqref{eq:2}, \eqref{eq:3} 代入 Eq~\eqref{eq:1} 得
-\begin{equation}
-  \label{eq:PrDelta}
-  \dmspr(\dmsdeltako|\dmsccck)=
-  \frac{\int\dmspr(c_{k+1}=\dmsdeltako/Q^{k+1}|\dmscbar)
-    \dmspr(\dmsccck|\dmscbar)\dmspr(\dmscbar)\mdif\dmscbar}{
-    Q^{k+1}\int\dmspr(\dmsccck|\dmscbar)\dmspr(\dmscbar)\mdif\dmscbar},
-  \qquad
-  \dmspr(\dmsccck|\dmscbar)=\prod_{n=0}^k\dmspr(c_n|\dmscbar)
-\end{equation}
-连乘式 $\prod\dmspr(c_n|\dmscbar)$ 中的项数可能少于 $k+1$，
-因为对于某些可观测量来说，
-部分系数可能自动等于零，
-不存在是随机变量的说法。
-当 $\dmspr(\Delta_k|\dmsccck)$ 求出后，
-可以进一步算出 $p\%$ 置信区间 $(-\dmsdkp,+\dmsdkp)$,
-\begin{equation}
-  \label{eq:DOB}
-  p\%=\int_{-\dmsdkp}^{+\dmsdkp}\dmspr(\Delta_k|\dmsccck)\mdif\Delta_k
-\end{equation}
+\input{section---General-Formula-of-the-h-omitted-term-Approximation}
+
+\input{priors}                  % TABLE
+
+\input{section---Analytic-Result-for-Set-A}
+
+\input{section---Numeric-Examination-for-Set-A-and-C.tex}
+
+\input{tab2}                    % TABLE
 
 
-\begin{table}
-  \caption{Prior pdfs.}
-  \label{tab:1}
-  \centering
-  \begin{tabular}{lccc}
-    \toprule
-    Set & $\dmspr(c_n|\dmscbar)$ && $\dmspr(\dmscbar)$ \\
-    \hline
-    A & $\frac{1}{2\dmscbar}\theta(\dmscbar-|c_n|)$ &\qquad&
-    $ \frac{1}{\dmscbar\ln\dmscbar_>/\dmscbar_<}\theta(
-    \dmscbar-\dmscbar_<)\theta(\dmscbar_>-\dmscbar)$ \\
-    B & $\frac{1}{2\dmscbar}\theta(\dmscbar-|c_n|)$ &&
-    $ \frac{1}{\dmscbar\sigma\sqrt{2\pi}}\exp\bigl[
-    - \frac{(\ln\dmscbar)^2}{2\sigma^2}\bigr]$ \\
-    C & $ \frac{1}{\dmscbar\sqrt{2\pi}}\exp\bigl(
-    - \frac{c_n^2}{2\dmscbar^2}\bigr)$ &&
-    $ \frac{1}{\dmscbar\ln\dmscbar_>/\dmscbar_<}\theta(
-    \dmscbar-\dmscbar_<)\theta(\dmscbar_>-\dmscbar)$ \\
-    \bottomrule
-  \end{tabular}
-\end{table}
-
-\section{Analytic Result for Set A}
-给定 Set A (See~\ref{tab:1}) 中的先验概率，
-$\dmspr(\dmsdeltako|\dmsccck)$ 可由 Eq~\eqref{eq:PrDelta} 解析地求出，
-并且由于最后的函数形式非常简单，
-相应的 $\dmsdkp$ 也可以直接计算 Eq~\eqref{eq:DOB} 中的积分得出。
-
-因为常值函数存在归一化的问题，
-此时 $\dmscbar$ 的积分区间实际上取不到 $(0,+\infty)$。
-Set A 选取的区间为 $(\dmscbar_<,\dmscbar_>)$
-(表现为 $\dmspr(\dmscbar)$ 中的 $\theta$ 函数)，
-并且假定它足够宽，
-\begin{equation}
-  \label{eq:4-1}
-  \dmscbar_< < \dmscbar_{(k)} < \dmscbar_>,\qquad
-  \dmscbar_{(k)}\equiv\max\{|c_0|,|c_1|,\ldots,|c_k|\}
-\end{equation}
-这样，
-Eq~\eqref{eq:PrDelta} 中分母的积分就容易算出，
-\begin{equation}
-  \label{eq:4-2}
-  \begin{aligned}
-    \int_0^\infty\dmspr(\dmsccck|\dmscbar)\dmspr(\dmscbar)\mdif\dmscbar
-    &=  \int_{\dmscbar_<}^{\dmscbar_>} \frac{1}{\dmscbar\ln\dmscbar_>/\dmscbar_<}
-    \prod_{n=0}^{k} \frac{\theta(\dmscbar-|c_n|)}{2\dmscbar}\mdif\dmscbar\\
-    &=  \frac{1}{2^{k+1}\ln\dmscbar_>/\dmscbar_>}\int_{\dmscbar_{(k)}}^{\dmscbar_>}
-    \frac{\mdif\dmscbar}{\dmscbar^{k+2}} \\
-    &= \frac{1}{k+1} \frac{1}{2^{k+1}\ln\dmscbar_>/\dmscbar_>}\cdot\biggl(
-    \frac{1}{\dmscbar^{k+1}}\biggr)\dmsvat[\bigg]{\dmscbar_>}{\dmscbar_{(k)}}
-  \end{aligned}
-\end{equation}
-类似地，
-Eq~\eqref{eq:PrDelta} 中分子的积分计算如下，
-\begin{equation}
-  \label{eq:4-3}
-  \begin{aligned}
-    \int_0^\infty\dmspr(c_{k+1}=\dmsdeltako/Q^{k+1}|\dmscbar)
-    \dmspr(\dmsccck|\dmscbar)\dmspr(\dmscbar)\mdif\dmscbar
-    &= \int_{\dmscbar_<}^{\dmscbar_>} \frac{1}{\dmscbar\ln\dmscbar_>/\dmscbar_<}
-    \prod_{n=0}^{k+1}\frac{\theta(\dmscbar-|c_n|)}{2\dmscbar}\mdif\dmscbar\\
-    &= \frac{\theta(\dmscbar_>-\dmscbar_{(k+1)})}{2^{k+2}
-      \ln\dmscbar_>/\dmscbar_>}\int^{\dmscbar_>}_{\max(\dmscbar_<,\dmscbar_{(k+1)})}
-    \frac{\mdif\dmscbar}{\dmscbar^{k+3}} \\
-    &= \frac{1}{k+2} \frac{\theta(\dmscbar_>-\dmscbar_{(k+1)})
-    }{2^{k+2}\ln\dmscbar_>/\dmscbar_>}\cdot\biggl(
-    \frac{1}{\dmscbar^{k+1}}\biggr)\dmsvat[\bigg]{\dmscbar_>}{
-      \max(\dmscbar_<,\dmscbar_{(k+1)})}\\
-    &\qquad\dmscbar_{(k+1)}\equiv\max(\dmscbar_{(k)},|\dmsdeltako|/Q^{k+1})
-  \end{aligned}
-\end{equation}
-
-这里 $\theta(\dmscbar_>-\dmscbar_{(k+1)})$ 与
-$\max(\dmscbar_<,\dmscbar_{(k+1)})$ 的出现是未曾像 Eq~\eqref{eq:4-1} 那样假设
-$\dmscbar_< <\dmscbar_{(k+1)}<\dmscbar_>$ 的结果。
-最后，
-在将 Eq~\eqref{eq:4-2}, \eqref{eq:4-3} 代入 Eq~\eqref{eq:PrDelta} 前，
-还需将结果中的 $k+1$ 替换成 $n_c$，
-因为有时 $c_0,c_1,\ldots,c_k$ 可能并不会全部出现，
-所以要用 $n_c$ 来表示这 $k+1$ 个系数中不为零的个数。
-总之，
-Eq~\eqref{eq:PrDelta} 可以化为
-\begin{equation}
-  \label{eq:PrDeltaSetA}
-  \begin{aligned}
-    \dmspr(\dmsdeltako|\dmsccck) &=
-    \frac{\theta(\dmscbar_>-\dmscbar_{(k+1)})}{2Q^{k+1}}\cdot
-    \frac{n_c}{n_c+1}\cdot\frac{(1/\dmscbar^{n_c+1})\dmsvat{\dmscbar_>}{
-        \max(\dmscbar_<,\dmscbar_{(k+1)})}}{(1/\dmscbar^{n_c})\dmsvat{
-        \dmscbar_>}{\dmscbar_{(k)}}} \\
-    &= \frac{1}{2Q^{k+1}} \frac{n_c}{n_c+1} \times
-    \begin{cases}
-      \frac{\frac{1}{\dmscbar^{n_c+1}}
-        \dmsvat{\dmscbar_>}{\dmscbar_{(k)}}}{
-        \frac{1}{\dmscbar^{n_c}}
-        \dmsvat{\dmscbar_>}{\dmscbar_{(k)}}},
-      &\quad |\dmsdeltako|\le\dmscbar_{(k)}Q^{k+1} \\
-      \frac{\frac{1}{\dmscbar^{n_c+1}}
-        \dmsvat{\dmscbar_>}{|\dmsdeltako|/Q^{k+1}}}{
-        \frac{1}{\dmscbar^{n_c}}
-        \dmsvat{\dmscbar_>}{\dmscbar_{(k)}}},
-      &\quad \dmscbar_{(k)}Q^{k+1}<|\dmsdeltako|\le\dmscbar_>Q^{k+1} \\
-      0, &\quad |\dmsdeltako|>\dmscbar_>Q^{k+1}
-    \end{cases}
-  \end{aligned}
-\end{equation}
-这表明 $\dmspr(\dmsdeltako|\dmsccck)$ 与 $\dmsdeltako$ 的函数关系事实上
-非常简单：
-在区间 $(-\dmscbar_{(k)}Q^{k+1},+\dmscbar_{(k)}Q^{k+1})$ 里，
-取值为与 $\dmsdeltako$ 无关的常数；
-在区间 $(-\infty,-\dmscbar_>Q^{k+1})$ 和 $(+\dmscbar_>Q^{k+1},+\infty)$ 里，
-取值为零；
-在这两种区间之外，
-函数值与 $\dmsdeltako$ 的依赖关系也具有 $ax^{-n}+b$ 的简单形式。
-这使得直接计算 Eq~\eqref{eq:DOB} 中的积分变得简单，
-\begin{equation}
-  \label{eq:DOBSetA}
-  p\%=
-  \begin{cases}
-    \frac{\dmsdkp}{Q^{k+1}} \frac{n_c}{n_c+1}
-    \frac{ \frac{1}{\dmscbar^{n_c+1}}\dmsvat{\dmscbar_{(k)}}{\dmscbar_>}}{
-      \frac{1}{\dmscbar^{n_c}}\dmsvat{\dmscbar_{(k)}}{\dmscbar_>}},
-    &\quad \dmsdkp\le\dmscbar_{(k)}Q^{k+1} \\
-    1 - \frac{1}{Q^{k+1}} \frac{n_c}{n_c+1}
-    \frac{1}{\frac{1}{\dmscbar^{n_c}}\dmsvat{\dmscbar_{(k)}}{\dmscbar_>}}
-    \Biggl[ \frac{Q^{(k+1)(n_c+1)}}{n_c}\biggl( \frac{1}{\Delta_k^{n_c}}
-      \biggr)\dmsvat[\bigg]{\dmscbar_>Q^{k+1}}{\dmsdkp}-
-      \frac{\dmscbar_>Q^{k+1}-\dmsdkp}{\dmscbar_>^{n_c+1}}\Biggr],
-    &\quad \dmscbar_{(k)}Q^{k+1} < \dmsdkp \le \dmscbar_>Q^{k+1} \\
-    1, &\quad \dmsdkp > \dmscbar_>Q^{k+1}
-  \end{cases}
-\end{equation}
-有时判定条件 $\dmsdkp\le\dmscbar_{(k)}Q^{k+1}$ 会换成
-\begin{equation}
-  p\%\le(p\%)_{\textrm{t}},
-  \qquad (p\%)_{\textrm{t}}\equiv
-  \frac{\frac{1}{\dmscbar^{n_c+1}}\dmsvat{\dmscbar_{(k)}}{\dmscbar_>}}{
-    \frac{1}{\dmscbar^{n_c}}\dmsvat{\dmscbar_{(k)}}{\dmscbar_>}}
-  \cdot \frac{n_c}{n_c+1}\dmscbar_{(k)}
-\end{equation}
-在 $(\dmscbar_<,\dmscbar_>)\to(0,\infty)$ 的极限情形，
-Eq~\eqref{eq:PrDeltaSetA}, \eqref{eq:DOBSetA} 相应地化简为
-\begin{equation}
-  \dmspr(\dmsdeltako|\dmsccck)= \frac{1}{2Q^{k+1}} \frac{n_c}{n_c+1}
-  \frac{1}{\dmscbar_{(k)}}\times
-  \begin{cases}
-    1,&\quad |\dmsdeltako|\le\dmscbar_{(k)}Q^{k+1}\\
-    \biggl( \frac{\dmscbar_{(k)}Q^{k+1}}{|\dmsdeltako|}\biggr)^{n_c+1},
-    &\quad \dmsdeltako > \dmscbar_{(k)}Q^{k+1}
-  \end{cases}
-\end{equation}
-\begin{equation}
-  \dmsdkp = \dmscbar_{(k)}Q^{k+1}\times
-  \begin{cases}
-    \frac{n_c+1}{n_c}p\%,
-    &\quad p\le \frac{n_c}{n_c+1}\\
-    \biggl[ \frac{1}{(n_c+1)(1-p\%)}\biggr]^{1/n_c},
-    &\quad p > \frac{n_c}{n_c+1}
-  \end{cases}
-\end{equation}
-
-\section{Numeric Examination for Set A and C}
-对于首项近似下的 Set A，
-应用 $\dmsdkp$ 的隐式表达式 Eq~\eqref{eq:DOBSetA}，
-可以得到 PRC2015 TABLE.~II 的结果。
-这里我们使用了函数 \inlinecode{scipy.optimize.root_scalar()}
-来求得 $p\%>(p\%)_t$ 时的结果
-(见~\href{https://github.com/Dou-Meishi/bayesforerror/blob/master/code/tab2.py}{\texttt{tab2.py}}).
-
-对于首项近似下的 Set C，
-可以应用公式 Eq~\eqref{eq:PrDelta} 数值计算得到 $\dmspr(\dmsdeltako|
-\dmsccck)$，
-然后使用隐式表达式 Eq~\eqref{eq:DOB} 求出 $\dmsdkp$
-(见~\href{https://github.com/Dou-Meishi/bayesforerror/blob/master/code/tab3-1.py}{\texttt{tab3-1.py}}).
-
-如果 \autoref{tab:tab2} 中的小数四舍五入到和 PRC2015 TABLE.~III 中相应精度，
-那么可以发现两张表的结果是完全一致的，
-没有任何不同。
-
-\input{tab2}
 \end{document}

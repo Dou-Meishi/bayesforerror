@@ -253,16 +253,20 @@ Eq~\eqref{eq:PrDeltaSetA}, \eqref{eq:DOBSetA} 相应地化简为
 \section{Numeric Examination for Set A and C}
 对于首项近似下的 Set A，
 应用 $\dmsdkp$ 的隐式表达式 Eq~\eqref{eq:DOBSetA}，
-可以得到 TABLE.~II 的结果。
+可以得到 PRC2015 TABLE.~II 的结果。
 这里我们使用了函数 \inlinecode{scipy.optimize.root_scalar()}
 来求得 $p\%>(p\%)_t$ 时的结果
-(见~\texttt{tab2.py}).
+(见~\href{https://github.com/Dou-Meishi/bayesforerror/blob/master/code/tab2.py}{\texttt{tab2.py}}).
 
 对于首项近似下的 Set C，
 可以应用公式 Eq~\eqref{eq:PrDelta} 数值计算得到 $\dmspr(\dmsdeltako|
 \dmsccck)$，
 然后使用隐式表达式 Eq~\eqref{eq:DOB} 求出 $\dmsdkp$
-(见~\texttt{tab3-1.py}).
+(见~\href{https://github.com/Dou-Meishi/bayesforerror/blob/master/code/tab3-1.py}{\texttt{tab3-1.py}}).
 
+如果 \autoref{tab:tab2} 中的小数四舍五入到和 PRC2015 TABLE.~III 中相应精度，
+那么可以发现两张表的结果是完全一致的，
+没有任何不同。
 
+\input{tab2}
 \end{document}

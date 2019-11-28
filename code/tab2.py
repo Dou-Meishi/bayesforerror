@@ -32,14 +32,15 @@ def main():
             [0, 1, 2, 3, 4],       # k
             [1]]                   # cbar_k
     # get the Cartesian product of args
-    args = np.stack(np.meshgrid(*args),axis=-1).reshape(-1,len(args))
+    args = np.stack(np.meshgrid(*args,indexing='ij'),
+                    axis=-1).reshape(-1,len(args))
     keys = ['Q','cbar_ge','k','cbar_k']
 
     for p in [.68,.95]:
         print('{:.0%} DOB width:'.format(p))
         for arg in args:
             kw = dict(zip(keys,arg))
-            d = dkp_A_eps(.68,**kw)
+            d = dkp_A_eps(p,**kw)
             print('\t{:.3g}'.format(d))
 
 

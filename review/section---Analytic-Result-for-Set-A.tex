@@ -2,7 +2,7 @@
 
 \section{Analytic Result for Set A}
 给定 Set A (See~\ref{tab:priors}) 中的先验概率，
-$\dmspr(\dmsdeltako|\dmsccck)$ 可由 Eq~\eqref{eq:PrDelta} 解析地求出，
+$\dmspr(\dmsdeltako|\dmsccck)$ 可由 Eq~\eqref{eq:PrDelta1} 解析地求出，
 并且由于最后的函数形式非常简单，
 相应的 $\dmsdkp$ 也可以直接计算 Eq~\eqref{eq:DOB} 中的积分得出。
 
@@ -17,7 +17,7 @@ Set A 选取的区间为 $(\dmscbar_<,\dmscbar_>)$
   \dmscbar_{(k)}\equiv\max\{|c_0|,|c_1|,\ldots,|c_k|\}
 \end{equation}
 这样，
-Eq~\eqref{eq:PrDelta} 中分母的积分就容易算出，
+Eq~\eqref{eq:PrDelta1} 中分母的积分就容易算出，
 \begin{equation}
   \label{eq:4-2}
   \begin{aligned}
@@ -31,7 +31,7 @@ Eq~\eqref{eq:PrDelta} 中分母的积分就容易算出，
   \end{aligned}
 \end{equation}
 类似地，
-Eq~\eqref{eq:PrDelta} 中分子的积分计算如下，
+Eq~\eqref{eq:PrDelta1} 中分子的积分计算如下，
 \begin{equation}
   \label{eq:4-3}
   \begin{aligned}
@@ -54,12 +54,12 @@ Eq~\eqref{eq:PrDelta} 中分子的积分计算如下，
 $\max(\dmscbar_<,\dmscbar_{(k+1)})$ 的出现是未曾像 Eq~\eqref{eq:4-1} 那样假设
 $\dmscbar_< <\dmscbar_{(k+1)}<\dmscbar_>$ 的结果。
 最后，
-在将 Eq~\eqref{eq:4-2}, \eqref{eq:4-3} 代入 Eq~\eqref{eq:PrDelta} 前，
+在将 Eq~\eqref{eq:4-2}, \eqref{eq:4-3} 代入 Eq~\eqref{eq:PrDelta1} 前，
 还需将结果中的 $k+1$ 替换成 $n_c$，
 因为有时 $c_0,c_1,\ldots,c_k$ 可能并不会全部出现，
 所以要用 $n_c$ 来表示这 $k+1$ 个系数中不为零的个数。
 总之，
-Eq~\eqref{eq:PrDelta} 可以化为
+Eq~\eqref{eq:PrDelta1} 可以化为
 \begin{equation}
   \label{eq:PrDeltaSetA}
   \begin{aligned}

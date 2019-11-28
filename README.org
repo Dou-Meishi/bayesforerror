@@ -9,19 +9,28 @@
 
   目前主要是对文献 PRC2015 的笔记。
   + ~preamble.tex~
+
 	导言区：页面格式，字体选择，各种用途宏包的载入及配置。
   + ~section---XXX.tex~
+
 	标题为 ~XXX~ 的内容。
   + ~priors.tex~
+
     Set A, B, C 对应概率分布函数的表格。
   + ~tab2.tex~
+
     ~code/tab2.py~ 的输出结果，与 PRC2015 TABLE. II 对应。
+  + ~Review.tex~
+    
+    正文区。
 
 + ~code/~
 
   目前主要是对文献 PRC2015 中数值计算结果的重复
   + ~tab2.py~
+
 	对 TABEL. II 结果的复现，输出顺序为从左到右，从上到下。
   + ~tab3-1.py~
+
 	对 TABEL. III 中部分结果 C^{(1)}_{\epsilon} 的复现。
 	输出顺序为从上到下，从左到右。

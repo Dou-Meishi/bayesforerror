@@ -35,13 +35,12 @@ def main():
     args = np.stack(np.meshgrid(*args),axis=-1).reshape(-1,len(args))
     keys = ['Q','cbar_ge','k','cbar_k']
 
-    print('.68% DOB width:')
     for p in [.68,.95]:
         print('{:.0%} DOB width:'.format(p))
         for arg in args:
             kw = dict(zip(keys,arg))
             d = dkp_A_eps(.68,**kw)
-            print('\t{:3g}'.format(d))
+            print('\t{:.3g}'.format(d))
 
 
 if __name__ == '__main__':

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-# Calculate table III
+# Calculate TABLE III
+# for Set C with first-omitted-term approximation
 
 import numpy as np
 from scipy.integrate import quad, nquad

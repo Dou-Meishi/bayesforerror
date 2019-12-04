@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 # Filename: prde.py
-# Calculate TABLE. III
+# Calculate p.d.f. of Delta in TABLE. III
 # for Set A, C without first-omitted-term approximation
 
+import logging
 import numpy as np
 from numpy import sqrt, pi
 from scipy.integrate import quad
@@ -13,6 +14,7 @@ cbar_le = .001
 cbar_ge = 1000
 limit = 200                      # arg passed to scipy.integrate.quad()
 _args = {}
+
 
 def setting_args(*, SET, Q, h=4, k=2, **kw):
     _args['SET'] = SET
@@ -33,14 +35,18 @@ def setting_args(*, SET, Q, h=4, k=2, **kw):
     else:
         raise ValueError('Please select a SET!')
 
+
 def _A_delta_if_cbar(delta, cbar):
+    '''pr(Delta|cbar). See PRC2017 Eq. (A4).'''
     def f(t):
         return priors._A_delta_if_cbar_f(t,delta, cbar,
             _args['Q'], _args['h'], _args['k'])
     res, _ = quad(f, 0, np.inf, limit=limit)
     return res/np.pi
 
+
 def pr_delta_A(delta):
+    '''pr(Delta|ccck) for Set A. See PRC2017 Eq. (6).'''
     def _delta_if_cbar(cbar):
         return _A_delta_if_cbar(delta, cbar)
     def _ccck_if_cbar(cbar):
@@ -53,9 +59,14 @@ def pr_delta_A(delta):
                         cbar_le, cbar_ge, limit=limit)
     denominator, _ = quad(lambda cbar:_ccck_if_cbar(cbar
     )*priors._pr_cbar_A(cbar), cbar_le, cbar_ge, limit=limit)
-    return numerator/denominator
+    res = numerator/denominator
+    logger = logging.getLogger('dmslog').getChild(__name__)
+    logger.debug('delta: {}\npr: {}'.format(delta,res))
+    return res
+
 
 def pr_delta_C(delta):
+    '''pr(Delta|ccck) for Set C. See PRC2017 Eq. (A9).'''
     Q, k, h = (_args['Q'], _args['k'], _args['h'])
     n_c = k + 1
     q = Q**(k+1) * sqrt((1-Q**(2*h))/(1-Q**2))
@@ -76,9 +87,9 @@ def main():
     import plpr
     setting_args(**args)
     plpr.setting_args(**args)
-    plpr.calc(pr_delta_C, 'refine')
+    # plpr.calc(pr_delta_C, 'refine')
     print(plpr.find_width(.95, err=.001))
-    plpr.plot_pr()
+    plpr.plot_pr(show=True)
     return
 
 

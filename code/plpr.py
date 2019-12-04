@@ -1,16 +1,17 @@
 # -*- coding: utf-8 -*-
 # Filename: plpr.py
-# plot p.d.f. of Delta (without first-term-approximation)
+# plot p.d.f. of Delta at specific points
 # for SET A or C with given function pr_delta()
-# and find p*100% DOB interval width using that p.d.f.
+# and read the p*100% DOB interval width from figures
 
-import os
+import os, logging
 import numpy as np
 from scipy.integrate import trapz
 from matplotlib import pyplot as plt
 
 _args = {}
 fmt = '{}_Q-{:3g}_{}.npy'
+
 
 def setting_args(*,  SET, Q, datapath='data', k=2, **kw):
     _args['datapath'] = datapath
@@ -19,34 +20,30 @@ def setting_args(*,  SET, Q, datapath='data', k=2, **kw):
     _args['SET'] = SET
     _args['Q'] = Q
     _args['k'] = k
-    return 
+    return
+
 
 def calc(pr_delta, mode='relax'):
+    logger = logging.getLogger('dmslog').getChild(__name__)
     try:
-        print('Getting previous calculated data...')
+        logger.info('Getting previous calculated data...')
         x = np.load(_args['fn_x'])
         y = np.load(_args['fn_y'])
     except FileNotFoundError:
-        print('Previous data not found! Initialize...')
+        logger.info('Previous data not found! Initialize...')
         x = np.linspace(0,_args['Q']**(_args['k']+1),10)
         y = [pr_delta(xx) for xx in x]
 
     if mode == 'refine':
         step = (x[1] - x[0])/2
-        if abs(x[2]-step*2-x[1]) > .001*step:
-            raise ValueError('Please check stepsize of x!')
-        else:
-            print('Calculating new {} points...'.format(len(x)))
+        logger.info('Calculating new {} points...'.format(len(x)))
         new_x = x + step
         new_y = [pr_delta(xx) for xx in new_x]
         x = np.stack((x, new_x),axis=-1).reshape(-1)[:-1]
         y = np.stack((y, new_y),axis=-1).reshape(-1)[:-1]
     elif mode == 'extend':
         step = x[-1] - x[0] + x[1] - x[0]
-        if abs(x[1] + step - x[-1]) < .999 * (x[1]-x[0]):
-            raise ValueError('Please check stepsize of x!')
-        else:
-            print('Calculating new {} points...'.format(len(x)))
+        logger.info('Calculating new {} points...'.format(len(x)))
         new_x = x + step
         new_y = [pr_delta(xx) for xx in new_x]
         x = np.hstack((x, new_x))
@@ -55,21 +52,32 @@ def calc(pr_delta, mode='relax'):
         pass
 
     if os.path.exists(_args['datapath']):
-        print('Saving calculated data...')
+        logger.info('Saving calculated data...')
     else:
-        print('Data dir not found! Create it and saving data...')
+        logger.warning('Data dir not found! Create it and saving data...')
         os.mkdir(_args['datapath'])
 
     np.save(_args['fn_x'], x)
     np.save(_args['fn_y'], y)
     return x, y
 
+
+class ThinIntervalError(Exception):
+    pass
+
+
+
+class LowAccuracyError(Exception):
+    pass
+
+
+
 def find_width(p, *, err=.005):
     x = np.load(_args['fn_x'])
     y = np.load(_args['fn_y'])
 
     if 2*trapz(y,x) < p:
-        raise ValueError('Need more (extend) data points!\n\
+        raise ThinIntervalError('Need more (extend) data points!\n\
 The integration on ({},{}) is {} while Given probability\
 is {}.'.format(x[0],x[-1],2*trapz(y,x),p))
     else:
@@ -81,25 +89,35 @@ is {}.'.format(x[0],x[-1],2*trapz(y,x),p))
             if d < err:
                 return x[i], x[i+1]
             else:
-                pass
-                raise ValueError('Need more (refine) data points!\n\
+                raise LowAccuracyError('Need more (refine) data points!\n\
 Upper error is {} while required accuracy is {}.'.format(d, err))
         else:
             pass
     return -1                     # won't happen usually
 
-def plot_pr():
+
+def plot_pr(*, show=False):
     x = np.load(_args['fn_x'])
     y = np.load(_args['fn_y'])
-    plt.scatter(x, y)
-    plt.show()
-    return 'Integration:', 2*trapz(y, x)
+    plt.scatter(x, y, label='SET: {}\nQ: {}'.format(
+                _args['SET'], _args['Q']))
+    plt.legend()
+    if show:
+        plt.show()
+    else:
+        return 'Totoal Integration:', 2*trapz(y, x)
+
 
 def _main():
+    setting_args(Q=.33, SET='Ca')
+    # calc(pr_delta, 'refine')
+    print(find_width(.95))
+    print(plot_pr())
     setting_args(Q=.33, SET='A')
     # calc(pr_delta, 'refine')
     print(find_width(.95))
     print(plot_pr())
+    plt.show()
 
 if __name__ == '__main__':
     import cProfile

@@ -60,14 +60,11 @@ def pr_cbar(cbar):
             cbar-cbar_le)* theta(cbar_ge-cbar)
 
 def main():
-    for cns in [[1., 1., 1.], [1., .5, .1], [1., .1, .1]]:
-        print('cns is [{:.2f},{:.2f},{:.2f}]:'.format(*cns))
-        for p in [.68, .95]:
-            print('\tDOB is {:.2%}:'.format(p))
-            for Q in [.20, .33, .50]:
-                print('\t\tQ is {:.2f}:'.format(Q))
+    for p in [.68, .95]:
+        for Q in [.20, .33, .50]:
+            for cns in [[1., 1., 1.], [1., .5, .1], [1., .1, .1]]:
                 i3 = _dkp_eps(p, pr_cn_if_cbar, pr_cbar, Q=Q, cns=cns)
-                print('{:.3g}'.format(i3))
+                print('{:.3g}'.format(i3))                
 
 
 if __name__ == '__main__':

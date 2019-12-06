@@ -1,0 +1,50 @@
+%% -*- coding: utf-8 -*-
+%% output of tab3-1.py (c.f. PRC2015 TABLE. III)
+
+\begin{table}
+  \renewcommand\arraystretch{1.0} % baselineskip  
+  \caption{首项近似下 Set A, C 区间宽度。$k=2$,
+    $\dmscbar_</\dmscbar_>=0.001/1000$,
+    $c_n(a),(b),(c)$ 表示已知系数的值，
+    分别为 $\{1.0,0.5,0.1\}, \{1.0,0.1,0.1\}$ (c.f. PRC2015 TABLE. III)。
+    颜色标出数字在文献中相应为(从上到下，从左到右)：
+    0.061, 0.025.}
+  \label{tab:tab3-1}
+  \centering
+  \begin{tabular}{*{11}{l}}
+    \toprule\hline
+    & \quad & $Q$ & \quad & $\textrm{A}_\epsilon^{(1)}$ & \quad &
+    $\textrm{C}_\epsilon^{(1)}\ c_n(a)$ & \quad &
+    $\textrm{C}_\epsilon^{(1)}\ c_n(b)$ & \quad &
+    $\textrm{C}_\epsilon^{(1)}\ c_n(c)$\\
+
+    \hline
+    %% ------------------------------
+    \multirow{3}{*}{68\%}
+    
+    && 0.20 && 0.00725 && 
+0.00951 && 0.00616 && 0.00555
+\\
+    && 0.33 && 0.0326 &&
+0.0427 && 0.0277 && 0.0249
+\\
+    && 0.50 && 0.113 &&
+0.149 && 0.0963 && 0.0867
+\\
+
+    \hline
+    %% ------------------------------
+    \multirow{3}{*}{95\%}
+    
+    && 0.20 && 0.0137 &&
+\dmscf{0.0255} && 0.0165 && 0.0148
+\\
+    && 0.33 && \dmscf{0.0615} &&
+0.114 && 0.0741 && 0.0667
+\\
+    && 0.50 && 0.0214 &&
+0.398 && 0.258 && 0.232
+\\
+    \hline\bottomrule
+  \end{tabular}
+\end{table}

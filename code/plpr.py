@@ -78,15 +78,15 @@ def find_width(p, *, err=.005):
 
     if 2*trapz(y,x) < p:
         raise ThinIntervalError('Need more (extend) data points!\n\
-The integration on ({},{}) is {} while Given probability\
-is {}.'.format(x[0],x[-1],2*trapz(y,x),p))
+ The integration on ({},{}) is {} while Given probability\
+ is {}.'.format(x[0],x[-1],2*trapz(y,x),p))
     else:
         D, d = (0, 0)
     for i in range(len(x)-1):
         d = 2*trapz(y[i:i+2], x[i:i+2])
         D += d
         if D > p:
-            if d < err:
+            if (D-p) < err:
                 return x[i], x[i+1]
             else:
                 raise LowAccuracyError('Need more (refine) data points!\n\
@@ -96,14 +96,16 @@ Upper error is {} while required accuracy is {}.'.format(d, err))
     return -1                     # won't happen usually
 
 
-def plot_pr(*, show=False):
+def plot_pr(*, show=False, save=True):
     x = np.load(_args['fn_x'])
     y = np.load(_args['fn_y'])
     plt.scatter(x, y, label='SET: {}\nQ: {}'.format(
                 _args['SET'], _args['Q']))
     plt.legend()
-    if show:
-        plt.show()
+    if save:
+        plt.savefig(_args['fn_x'][:-6]+'.png')
+    elif show:
+        plt.show()                  # won't happen if save=True
     else:
         return 'Totoal Integration:', 2*trapz(y, x)
 
@@ -118,6 +120,8 @@ def _main():
     print(find_width(.95))
     print(plot_pr())
     plt.show()
+
+
 
 if __name__ == '__main__':
     import cProfile

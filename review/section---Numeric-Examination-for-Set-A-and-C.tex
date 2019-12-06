@@ -13,10 +13,7 @@
 \dmsccck)$，
 然后使用隐式表达式 Eq~\eqref{eq:DOB} 求出 $\dmsdkp$
 (见~\href{https://github.com/Dou-Meishi/bayesforerror/blob/master/code/tab3-1.py}{\texttt{tab3-1.py}}).
-
-如果 \autoref{tab:tab2} 中的小数四舍五入到和 PRC2015 TABLE.~III 中相应精度，
-那么可以发现两张表的结果是完全一致的，
-没有任何不同。
+结果见 \autoref{tab:tab3-1}.
 
 对于不使用首项近似的情形，
 可以从 Eq~\eqref{eq:PrDeltah} 出发。
@@ -91,8 +88,30 @@ Eq~\eqref{eq:54} 和 Eq~\eqref{eq:53} 的计算非常类似，
 仅需要令 $n_c\mapsto n_c+1, \alpha\mapsto\beta$。
 这里 $\alpha,\beta$ 定义为
 \begin{equation}
+  \label{eq:55}
   \alpha\equiv \frac{1}{2}\dmsccckb^2,
   \qquad
   \beta\equiv \frac{1}{2}\Bigl(\dmsccckb^2+ \frac{\Delta^2}{q^2}
   \Bigr)
 \end{equation}
+
+有了 Eq~\eqref{eq:PrhABC}--\eqref{eq:55},
+Eq~\eqref{eq:PrDeltah} 的数值计算就简便许多。
+虽然对于 Set A 而言，
+Eq~\eqref{eq:PrhABC} 中的被积函数振荡非常频繁，
+($h+1$ 个三角函数因子带来了无穷多个零点)，
+而且整个积分还是无穷限的反常积分。
+但好在整个函数的振幅衰减速度接近 $1/t^h$，
+在 $h>1$ 时积分随区间总长度收敛速度较快。
+尽管如此，
+此积分随分割小区间的收敛速度还是很慢，
+难于计算。
+如果有可能，
+对于这种振荡型积分来说，
+应该在相邻两个零点 $(z_k,z_{k+1})$ 之间用一般的方法求出 $I_k$，
+最后研究求和项 $\sum I_k$ 的收敛情况更好些。
+
+PRC2015 TABLE.~II, III 分别对应这里的
+\autoref{tab:tab2}, \autoref{tab:tab3-1} 和 \autoref{tab:tab3-2}，
+已将出现冲突的地方用颜色标出。
+可以看出复现的结果只有少数几个点出现了小数点后一到两位的误差。

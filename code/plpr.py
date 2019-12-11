@@ -12,7 +12,7 @@ from matplotlib import pyplot as plt
 _args = {}
 
 
-def setting_args(*,  SET, Q, fmt, datapath='data', k=2, **kw):
+def setting_args(*,  SET, Q, k=2, fmt, datapath='data', **kw):
     _args['datapath'] = datapath
     _args['fn'] = os.path.join(datapath, fmt.format(
         SET=SET, Q=Q, k=k, **kw))
@@ -97,18 +97,42 @@ Upper error is {} while required accuracy is {}.'.format(d, err))
     return -1                     # won't happen usually
 
 
-def plot_pr(*, show=False, save=True):
+def get_dkp(p, *, depth, err, pr_delta):
+    calc(pr_delta, 'relax')
+    for _ in range(depth):
+        try:
+            find_width(p, err=err)
+        except ThinIntervalError:
+            calc(pr_delta, 'extend')
+        except LowAccuracyError:
+            calc(pr_delta, 'refine')
+        else:
+            break
+
+    try:
+        return find_width(p,err=err)[0]
+    except LowAccuracyError:
+        logger = logging.getLogger('dmslog')
+        logger.warning('Failed to find DOB width within\
+ {} search!'.format(depth))
+        intv = find_width(p,err=np.inf)
+        logger.warning("It's assumed to be in ({:.3g},{:.3g}) in the last\
+ search.".format(intv[0], intv[1]))
+        return intv[0]
+
+
+
+def plot_pr(*, show=False):
     x = np.load(_args['fn_x'])
     y = np.load(_args['fn_y'])
     plt.scatter(x, y, label='SET: {}\nQ: {}'.format(
                 _args['SET'], _args['Q']))
     plt.legend()
-    if save:
-        plt.savefig(_args['fn']+'.png')
-    elif show:
-        plt.show()                  # won't happen if save=True
+    if show:
+        plt.show()
     else:
-        return 'Totoal Integration:', 2*trapz(y, x)
+        plt.savefig(_args['fn']+'.png')
+    return 'Totoal Integration:', 2*trapz(y, x)
 
 
 def _main():

@@ -6,15 +6,22 @@ import numpy as np
 import plpr, prde
 import logging.config, yaml # logging module
 
-def tab3C(p, **args):
-    prde.setting_args(**args)
+fmt = '{SET}_Q-{Q:3g}'
+ccck = {'A': [1., 1., 1.],
+        'Ca': [1., 1., 1.],
+        'Cb': [1., .5, .1],
+        'Cc': [1., .1, .1]}
+
+
+def tab3C(p, *, err=.001, **args):
+    prde.setting_args(ccck=ccck[args['SET']], **args)
     plpr.setting_args(**args)
     plpr.calc(prde.pr_delta_C, 'relax')
     depth = 10
 
     for _ in range(depth):
         try:
-            plpr.find_width(p, err=.001)
+            plpr.find_width(p, err=err)
         except plpr.ThinIntervalError:
             plpr.calc(prde.pr_delta_C, 'extend')
         except plpr.LowAccuracyError:
@@ -23,7 +30,7 @@ def tab3C(p, **args):
             break
 
     try:
-        return plpr.find_width(p,err=.001)[0]
+        return plpr.find_width(p,err=err)[0]
     except plpr.LowAccuracyError:
         logger = logging.getLogger('dmslog')
         logger.warning('Failed to find DOB width within\
@@ -34,8 +41,8 @@ def tab3C(p, **args):
         return intv[0]
 
 
-def tab3A(p, **args):
-    plpr.setting_args(**args)
+def tab3A(p, *, err=.005, **args):
+    plpr.setting_args(ccck=ccck[args['SET']], **args)
     prde.setting_args(**args)
     plpr.calc(prde.pr_delta_A, 'relax')
     depth = 0
@@ -43,7 +50,7 @@ def tab3A(p, **args):
     for _ in range(depth):
         logger = logging.getLogger('dmslog').getChild(__name__)
         try:
-            plpr.find_width(p, err=.001)[0]
+            plpr.find_width(p, err=err)[0]
         except plpr.ThinIntervalError:
             logger.info('Extending interval...')
             plpr.calc(prde.pr_delta_A, 'extend')
@@ -54,7 +61,7 @@ def tab3A(p, **args):
             break
 
     try:
-        return plpr.find_width(p,err=.001)[0]
+        return plpr.find_width(p,err=err)[0]
     except plpr.LowAccuracyError:
         logger = logging.getLogger('dmslog')
         logger.warning('Failed to find DOB width within\
@@ -78,16 +85,16 @@ def main():
 #         p = .68
 #         for Q in [.20, .33, .50]:
 #             print('{:.0%} DOB width of Set {} with Q {} is \n\t\
-# {:.3g}'.format(p, SET, Q, tab3A(p, SET=SET, Q=Q)))
+# {:.3g}'.format(p, SET, Q, tab3A(p, SET=SET, Q=Q, fmt=fmt)))
 #         p = .95
 #         for Q in [.20, .33, .50]:
 #             print('{:.0%} DOB width of Set {} with Q {} is \n\t\
-# {:.3g}'.format(p, SET, Q, tab3A(p, SET=SET, Q=Q)))
+# {:.3g}'.format(p, SET, Q, tab3A(p, SET=SET, Q=Q, fmt=fmt)))
 
     for p in [.68, .95]:
         for Q in [.20, .33, .50]:
             for SET in ['Ca', 'Cb', 'Cc']:
-                print('{:.3g}'.format(tab3C(p, SET=SET, Q=Q)))
+                print('{:.3g}'.format(tab3C(p, SET=SET, Q=Q, fmt=fmt)))
 
     logger = logging.getLogger('dmslog').getChild(__name__)
     logger.info('Main program finished.')

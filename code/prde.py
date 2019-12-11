@@ -16,24 +16,13 @@ limit = 200                      # arg passed to scipy.integrate.quad()
 _args = {}
 
 
-def setting_args(*, SET, Q, h=4, k=2, **kw):
-    _args['SET'] = SET
+def setting_args(*, Q, ccck, k=2, n_c=3, h=4, **kw):
     _args['Q'] = Q
+    _args['ccck'] = ccck
     _args['h'] = h
     _args['k'] = k
-    if SET[0] == 'A':
-        _args['ccck'] = [1., 1., 1.]
-    elif SET[0] == 'C':
-        if SET[1] == 'a':
-            _args['ccck'] = [1., 1., 1.]
-        elif SET[1] == 'b':
-            _args['ccck'] = [1., .5, .1]
-        elif SET[1] == 'c':
-            _args['ccck'] = [1., .1, .1]
-        else:
-            raise ValueError('{} is not a proper SET!'.format(SET))
-    else:
-        raise ValueError('Please select a SET!')
+    _args['n_c'] = n_c
+    return
 
 
 def _A_delta_if_cbar(delta, cbar):

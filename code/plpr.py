@@ -10,13 +10,14 @@ from scipy.integrate import trapz
 from matplotlib import pyplot as plt
 
 _args = {}
-fmt = '{}_Q-{:3g}_{}.npy'
 
 
-def setting_args(*,  SET, Q, datapath='data', k=2, **kw):
+def setting_args(*,  SET, Q, fmt, datapath='data', k=2, **kw):
     _args['datapath'] = datapath
-    _args['fn_x'] = os.path.join(datapath, fmt.format(SET, Q, 'x'))
-    _args['fn_y'] = os.path.join(datapath, fmt.format(SET, Q, 'y'))
+    _args['fn'] = os.path.join(datapath, fmt.format(
+        SET=SET, Q=Q, k=k, **kw))
+    _args['fn_x'] = _args['fn'] + '_x.npy'
+    _args['fn_y'] = _args['fn'] + '_y.npy'
     _args['SET'] = SET
     _args['Q'] = Q
     _args['k'] = k
@@ -103,7 +104,7 @@ def plot_pr(*, show=False, save=True):
                 _args['SET'], _args['Q']))
     plt.legend()
     if save:
-        plt.savefig(_args['fn_x'][:-6]+'.png')
+        plt.savefig(_args['fn']+'.png')
     elif show:
         plt.show()                  # won't happen if save=True
     else:

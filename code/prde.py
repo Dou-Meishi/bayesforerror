@@ -56,8 +56,7 @@ def pr_delta_A(delta):
 
 def pr_delta_C(delta):
     '''pr(Delta|ccck) for Set C. See PRC2017 Eq. (A9).'''
-    Q, k, h = (_args['Q'], _args['k'], _args['h'])
-    n_c = k + 1
+    Q, k, h, n_c = (_args['Q'], _args['k'], _args['h'], _args['n_c'])
     q = Q**(k+1) * sqrt((1-Q**(2*h))/(1-Q**2))
     ckb = np.sum(np.square(_args['ccck']))
     alpha = .5 * ckb

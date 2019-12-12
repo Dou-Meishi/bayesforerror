@@ -5,6 +5,7 @@
 import numpy as np
 from numpy import sqrt
 
+
 # first column is T_lab, not p_rel
 dataIV = [[50, 183.6, 166.5, 167.0, 166.8, 167.5],
           [96, 84.8, 75.1, 78.3, 77.5, 78.0],
@@ -14,6 +15,7 @@ dataV =  [[50, 159.4, 164.8, 165.6, 167.2, 167.9],
           [96, 60.2, 68.9, 71.3, 78.1, 78.5],
           [143, 30.8, 38.6, 41.4, 52.6, 52.7],
           [200, 17.2, 22.5, 25.0, 38.6, 38.3]]
+
 
 def _get_ccck(T, Lambda, sigmas):
     '''Extract ccck from experimental data (See Eq. (37)).'''

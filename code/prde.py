@@ -6,7 +6,7 @@
 import logging
 import numpy as np
 from numpy import sqrt, pi
-from scipy.integrate import quad
+from scipy.integrate import quad, nquad
 from scipy.special import gamma, gammaincc
 import c_priors as priors       # write with Cython
 
@@ -37,10 +37,17 @@ def _A_delta_if_cbar(delta, cbar):
 def pr_delta_A(delta):
     '''pr(Delta|ccck) for Set A. See PRC2017 Eq. (6).'''
     def _delta_if_cbar(cbar):
-        return _A_delta_if_cbar(delta, cbar)
+        # return _A_delta_if_cbar(delta, cbar)
+        res, _ = nquad(priors._A_delta_if_cbar_f,
+                      [[0, np.inf]],
+                      args=[delta, cbar,
+                            _args['Q'], _args['h'], _args['k']],
+                      opts={'limit': limit})
+        return res/np.pi
     def _ccck_if_cbar(cbar):
         y = 1
-        for cn in _args['ccck']:
+        ccck = np.array(_args['ccck'])
+        for cn in ccck[ccck.nonzero()]:
             y *= priors._pr_cn_if_cbar_A(cn, cbar)
         return y
     numerator, _ = quad(lambda cbar:_delta_if_cbar(
@@ -51,6 +58,32 @@ def pr_delta_A(delta):
     res = numerator/denominator
     logger = logging.getLogger('dmslog').getChild(__name__)
     logger.debug('delta: {}\npr: {}'.format(delta,res))
+    return res
+
+
+def pr_delta_B(delta):
+    '''pr(Delta|ccck) for Set B. See PRC2017 Eq. (A9).'''
+    def _delta_if_cbar(cbar):
+        res, _ = nquad(priors._A_delta_if_cbar_f, # same as Set A
+                       [[0, np.inf]],
+                       args=[delta, cbar,
+                             _args['Q'], _args['h'], _args['k']],
+                       opts={'limit': limit})
+        return res/np.pi
+    def _ccck_if_cbar(cbar):
+        y = 1
+        ccck = np.array(_args['ccck'])
+        for cn in ccck[ccck.nonzero()]:
+            y *= priors._pr_cn_if_cbar_B(cn, cbar)
+        return y
+    numerator, _ = quad(lambda cbar:_delta_if_cbar(
+        cbar)*_ccck_if_cbar(cbar)*priors._pr_cbar_B(cbar),
+                        cbar_le, cbar_ge, limit=limit)
+    denominator, _ = quad(lambda cbar:_ccck_if_cbar(cbar
+    )*priors._pr_cbar_B(cbar), cbar_le, cbar_ge, limit=limit)
+    res = numerator/denominator
+    logger = logging.getLogger('dmslog').getChild(__name__)
+    logger.debug('delta: {}\npr: {}'.format(delta, res))
     return res
 
 

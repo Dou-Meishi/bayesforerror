@@ -1,0 +1,38 @@
+%% -*- coding: utf-8 -*-
+
+\section{Application in Chiral EFT---NP Scattering}
+
+中子--质子散射总截面在手征微扰论中展开到 $k$ 阶可以写成
+\begin{equation}
+  \label{eq:CrossSection}
+\sigma \approx \sigma_{\textrm{ref}}\sum_{n=0}^k c_n
+\Bigl( \frac{p}{\Lambda_b} \Bigr)^n.
+\end{equation}
+这里主要考虑 $k=0,1,\ldots,5$ 的情形，
+对应的截面记作 LO${}^\prime$, LO, NLO, N${}^2$LO, N${}^3$LO, N${}^4$LO。
+$\sigma_{\textrm{ref}}$ 取为 LO，
+实际上也可以取作 N${}^4$LO，
+但这不影响分析。
+$\Lambda_b$ 是破缺尺度参量 (breakdown scale)，
+其与坐标空间正则化参量 (coordinate-space regulator parameter) $R$ 有关。
+
+PRC2015 TABLE.~IV, V 列出了两组实验数据，
+给出了 $R$ 和实验室能量 $T_{\textrm{lab}}$ 确定后测得的截面。
+对于中子--质子散射而言，
+理论分析中可以确定 $c_1=0$，
+LO${}^\prime$ 与 LO 截面大小是一样的，
+所以 PRC2015 列出的实验数据中没有 LO${}^\prime$ 这一栏。
+在 $p/\Lambda_b$ 确定后，
+利用 Eq~\eqref{eq:CrossSection} 很容易从截面数据中算出 $c_0,\ldots, c_k$，
+见 \autoref{tab:tab67}.
+$c_0=1$ 是取 LO (LO${}^\prime$) 为 $\sigma_{\textrm{ref}}$ 的结果。
+
+根据前面的分析，
+有了 $c_0,c_1,\ldots,c_k$ 就可以估计在 $k$ 阶处截断引入的误差 $\Delta$.
+\autoref{tab:tab8} 是选用 Set A${}_{\epsilon}^{(1)}$ 作 prior pdfs 的计算结果，
+使用的数据是 \autoref{tab:tab6} (也就是 PRC2015 TABLE.~IV)。
+因为取 $\sigma_{\textrm{ref}}$ 为 LO，
+所以误差 $\Delta$ 的单位也是 LO.
+\autoref{tab:tab9} 是不作首项近似的结果。
+精确到第二位有效数字时，
+计算结果和 PRC2015 是完全符合的。

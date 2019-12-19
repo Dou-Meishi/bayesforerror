@@ -1,0 +1,53 @@
+%% -*- coding: utf-8 -*-
+%% output of tab67.py (c.f. PRC2015 TABLE. VI, VII)
+
+\begin{table}
+  \caption{PRC2015 TABLE. VI, VII 的结果复现。
+    $p_{\textrm{rel}}=\sqrt{M_nT_{\textrm{lab}}/2}$，
+    其中 $M_n=\SI{939}{\mega\electronvolt}$ 是核子质量。\label{tab:tab67}}
+  \begin{adjustbox}{width=1.2\textwidth, center}
+    \begin{subtable}{.6\textwidth}
+      \centering
+
+%% ----------------------------------------
+\begin{tabular}{*{7}{l}}
+  \toprule\hline
+  $T_{\textrm{lab}}$ \quad &
+  $c_0$ \quad & $c_1$ \quad & $c_2$ \quad &
+  $c_3$ \quad & $c_4$ \quad & $c_5$ \quad \\
+  \hline
+  50 & 1.0 & 0.0 & -1.43 & 0.164 & -0.258 & 3.54  \\
+  96 & 1.0 & 0.0 & -0.916 & 0.855 & -0.605 & 1.07 \\
+  143 &1.0 & 0.0 & -0.348 & 1.21 & -0.274 & 0.254 \\
+  200 &1.0 & 0.0 & 0.109 & 1.43 & 0.251 & -0.409\\
+  \hline\bottomrule
+\end{tabular}
+\subcaption{$R=\SI{.9}{\femto\meter},\Lambda_b=\SI{600}{
+    \mega\electronvolt}$.\label{tab:tab6}}
+%% ----------------------------------------
+
+    \end{subtable}%
+    \begin{subtable}{.6\textwidth}
+      \centering
+
+%% ----------------------------------------
+\begin{tabular}{*{7}{l}}
+  \toprule\hline
+  $T_{\textrm{lab}}$ \quad &
+  $c_0$ \quad & $c_1$ \quad & $c_2$ \quad &
+  $c_3$ \quad & $c_4$ \quad & $c_5$ \quad \\
+  \hline
+  50 & 1.0 & 0.0 & 0.232 & 0.0897 & 0.469 & 0.536  \\
+  96 & 1.0 & 0.0 & 0.514 & 0.268 & 1.43 & 0.159    \\
+  143 &1.0 & 0.0 & 0.604 & 0.335 & 2.07 & 0.0285   \\
+  200 &1.0 & 0.0 & 0.523 & 0.321 & 2.28 & -0.0655  \\
+  \hline\bottomrule
+\end{tabular}
+\subcaption{$R=\SI{1.2}{\femto\meter}, \Lambda_b=\SI{400}{
+    \mega\electronvolt}$.\label{tab:tab7}}
+%% ----------------------------------------
+
+    \end{subtable}
+    \end{adjustbox}
+
+\end{table}

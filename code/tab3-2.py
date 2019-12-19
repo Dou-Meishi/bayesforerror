@@ -80,7 +80,7 @@ def ini_log():
 
 def main():
     ini_log()
-    
+
 #     for SET in ['A']:
 #         p = .68
 #         for Q in [.20, .33, .50]:
@@ -91,10 +91,10 @@ def main():
 #             print('{:.0%} DOB width of Set {} with Q {} is \n\t\
 # {:.3g}'.format(p, SET, Q, tab3A(p, SET=SET, Q=Q, fmt=fmt)))
 
-    for p in [.68, .95]:
-        for Q in [.20, .33, .50]:
-            for SET in ['Ca', 'Cb', 'Cc']:
-                print('{:.3g}'.format(tab3C(p, SET=SET, Q=Q, fmt=fmt)))
+    # for p in [.68, .95]:
+    #     for Q in [.20, .33, .50]:
+    #         for SET in ['Ca', 'Cb', 'Cc']:
+    #             print('{:.3g}'.format(tab3C(p, SET=SET, Q=Q, fmt=fmt)))
 
     logger = logging.getLogger('dmslog').getChild(__name__)
     logger.info('Main program finished.')

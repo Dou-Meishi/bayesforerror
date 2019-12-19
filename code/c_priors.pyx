@@ -58,10 +58,13 @@ def _pr_cbar_C(double cbar):
 def _A_delta_if_cbar_f(double t, double delta,
                        double cbar, double Q, int h, int k):
     cdef double y = cos(t*delta)
-    cdef double x
-    cdef int n = k+1
-    while n <= k+h:
-        x = Q**n *t*cbar
-        y *= sin(x)/x
-        n += 1
-    return y
+    cdef double x = Q**(k+1)*t*cbar
+    cdef int n = 0
+    if x == 0:
+        return 1
+    else:
+        while n < h:
+            y *= sin(x)/x
+            x *= Q
+            n += 1
+        return y

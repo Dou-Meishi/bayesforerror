@@ -4,6 +4,7 @@
 import numpy as np
 from numpy import sqrt
 import prde, plpr
+import logging.config, yaml     # logging module
 
 
 # first column is T_lab, not p_rel
@@ -35,36 +36,47 @@ def _get_ccck(T, Lambda, sigmas):
     return ccck
 
 
-def tab9C(p, data, *, err=.001):
+def tab9(p, data, SET):
     T = data[0]
     Q = sqrt(.5*939*T)/Lambda
     ccck = _get_ccck(T, Lambda, data[1:])
     res = np.zeros(len(X_p))
-    depth = 10
     for n in range(len(X_p)):
         prde.setting_args(Q=Q, ccck=ccck[:n+1], **X_p[n])
-        plpr.setting_args(SET='C', Q=Q, **X_p[n], fmt=fmt)
-        res[n] = plpr.get_dkp(p, depth=10, err=err,
-                              pr_delta=prde.pr_delta_C)
+        plpr.setting_args(SET=SET, Q=Q, **X_p[n], fmt=fmt)
+        d_kw={'A': {'pr_delta' : prde.pr_delta_A,
+                    'depth'    : 10,
+                    'max_length': 300},
+              'B': {'pr_delta' : prde.pr_delta_B,
+                    'depth'    : 10,
+                    'max_length': 300},
+              'C': {'pr_delta' : prde.pr_delta_C,
+                    'depth'    : 15,
+                    'max_length': 1500}}
+        res[n] = plpr.interpolate_dkp(p, **d_kw[SET])
     return res
 
 
+def ini_log():
+    with open('./logconf.yaml', 'r') as f:
+        logconf = yaml.safe_load(f.read())
+    logging.config.dictConfig(logconf)
+    return
+
+
 def main():
-    # p = .68
-    # data = dataIV[0]
-    # T = data[0]
-    # Q = sqrt(.5*939*T)/Lambda
-    # ccck = _get_ccck(T, Lambda, data[1:])
-    # prde.setting_args(Q=Q, ccck=ccck, k=5, n_c=5)
-    # plpr.setting_args(SET='C', Q=Q, k=5, fmt=fmt)
-    # plpr.calc(prde.pr_delta_C, 'refine')
-    # print(plpr.find_width(p))
-    # plpr.plot_pr(show=True)
-    for p in [.68, .95]:
+    ini_log()
+    
+    for p in [.68]:
         print('\n{:.0%} DOB:'.format(p))
         for data in dataIV:
             print('\nT: {}'.format(data[0]))
-            print(res_fmt.format(*tab9C(p, data)))
+            print(res_fmt.format(*tab9(p, data, 'A')))
+            print(res_fmt.format(*tab9(p, data, 'C')))
+            print(res_fmt.format(*tab9(p, data, 'B')))
+
+    logger = logging.getLogger('dmslog').getChild(__name__)
+    logger.info("Main programe finished.")
     return
 
 

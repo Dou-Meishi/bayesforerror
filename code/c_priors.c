@@ -1095,6 +1095,7 @@ static PyObject *__pyx_pf_8c_priors_6_pr_cbar_B(CYTHON_UNUSED PyObject *__pyx_se
 static PyObject *__pyx_pf_8c_priors_8_pr_cn_if_cbar_C(CYTHON_UNUSED PyObject *__pyx_self, double __pyx_v_cn, double __pyx_v_cbar); /* proto */
 static PyObject *__pyx_pf_8c_priors_10_pr_cbar_C(CYTHON_UNUSED PyObject *__pyx_self, double __pyx_v_cbar); /* proto */
 static PyObject *__pyx_pf_8c_priors_12_A_delta_if_cbar_f(CYTHON_UNUSED PyObject *__pyx_self, double __pyx_v_t, double __pyx_v_delta, double __pyx_v_cbar, double __pyx_v_Q, int __pyx_v_h, int __pyx_v_k); /* proto */
+static PyObject *__pyx_int_1;
 static PyObject *__pyx_tuple_;
 static PyObject *__pyx_tuple__3;
 static PyObject *__pyx_tuple__5;
@@ -1922,74 +1923,116 @@ static PyObject *__pyx_pf_8c_priors_12_A_delta_if_cbar_f(CYTHON_UNUSED PyObject 
  * def _A_delta_if_cbar_f(double t, double delta,
  *                        double cbar, double Q, int h, int k):
  *     cdef double y = cos(t*delta)             # <<<<<<<<<<<<<<
- *     cdef double x
- *     cdef int n = k+1
+ *     cdef double x = Q**(k+1)*t*cbar
+ *     cdef int n = 0
  */
   __pyx_v_y = cos((__pyx_v_t * __pyx_v_delta));
 
+  /* "c_priors.pyx":61
+ *                        double cbar, double Q, int h, int k):
+ *     cdef double y = cos(t*delta)
+ *     cdef double x = Q**(k+1)*t*cbar             # <<<<<<<<<<<<<<
+ *     cdef int n = 0
+ *     if x == 0:
+ */
+  __pyx_v_x = ((pow(__pyx_v_Q, ((double)(__pyx_v_k + 1))) * __pyx_v_t) * __pyx_v_cbar);
+
   /* "c_priors.pyx":62
  *     cdef double y = cos(t*delta)
- *     cdef double x
- *     cdef int n = k+1             # <<<<<<<<<<<<<<
- *     while n <= k+h:
- *         x = Q**n *t*cbar
+ *     cdef double x = Q**(k+1)*t*cbar
+ *     cdef int n = 0             # <<<<<<<<<<<<<<
+ *     if x == 0:
+ *         return 1
  */
-  __pyx_v_n = (__pyx_v_k + 1);
+  __pyx_v_n = 0;
 
   /* "c_priors.pyx":63
- *     cdef double x
- *     cdef int n = k+1
- *     while n <= k+h:             # <<<<<<<<<<<<<<
- *         x = Q**n *t*cbar
- *         y *= sin(x)/x
+ *     cdef double x = Q**(k+1)*t*cbar
+ *     cdef int n = 0
+ *     if x == 0:             # <<<<<<<<<<<<<<
+ *         return 1
+ *     else:
  */
-  while (1) {
-    __pyx_t_1 = ((__pyx_v_n <= (__pyx_v_k + __pyx_v_h)) != 0);
-    if (!__pyx_t_1) break;
+  __pyx_t_1 = ((__pyx_v_x == 0.0) != 0);
+  if (__pyx_t_1) {
 
     /* "c_priors.pyx":64
- *     cdef int n = k+1
- *     while n <= k+h:
- *         x = Q**n *t*cbar             # <<<<<<<<<<<<<<
- *         y *= sin(x)/x
- *         n += 1
+ *     cdef int n = 0
+ *     if x == 0:
+ *         return 1             # <<<<<<<<<<<<<<
+ *     else:
+ *         while n < h:
  */
-    __pyx_v_x = ((pow(__pyx_v_Q, ((double)__pyx_v_n)) * __pyx_v_t) * __pyx_v_cbar);
+    __Pyx_XDECREF(__pyx_r);
+    __Pyx_INCREF(__pyx_int_1);
+    __pyx_r = __pyx_int_1;
+    goto __pyx_L0;
 
-    /* "c_priors.pyx":65
- *     while n <= k+h:
- *         x = Q**n *t*cbar
- *         y *= sin(x)/x             # <<<<<<<<<<<<<<
- *         n += 1
- *     return y
+    /* "c_priors.pyx":63
+ *     cdef double x = Q**(k+1)*t*cbar
+ *     cdef int n = 0
+ *     if x == 0:             # <<<<<<<<<<<<<<
+ *         return 1
+ *     else:
  */
-    __pyx_t_2 = sin(__pyx_v_x);
-    if (unlikely(__pyx_v_x == 0)) {
-      PyErr_SetString(PyExc_ZeroDivisionError, "float division");
-      __PYX_ERR(0, 65, __pyx_L1_error)
-    }
-    __pyx_v_y = (__pyx_v_y * (__pyx_t_2 / __pyx_v_x));
-
-    /* "c_priors.pyx":66
- *         x = Q**n *t*cbar
- *         y *= sin(x)/x
- *         n += 1             # <<<<<<<<<<<<<<
- *     return y
- */
-    __pyx_v_n = (__pyx_v_n + 1);
   }
 
-  /* "c_priors.pyx":67
- *         y *= sin(x)/x
- *         n += 1
- *     return y             # <<<<<<<<<<<<<<
+  /* "c_priors.pyx":66
+ *         return 1
+ *     else:
+ *         while n < h:             # <<<<<<<<<<<<<<
+ *             y *= sin(x)/x
+ *             x *= Q
  */
-  __Pyx_XDECREF(__pyx_r);
-  __pyx_t_3 = PyFloat_FromDouble(__pyx_v_y); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 67, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __pyx_r = __pyx_t_3;
-  __pyx_t_3 = 0;
-  goto __pyx_L0;
+  /*else*/ {
+    while (1) {
+      __pyx_t_1 = ((__pyx_v_n < __pyx_v_h) != 0);
+      if (!__pyx_t_1) break;
+
+      /* "c_priors.pyx":67
+ *     else:
+ *         while n < h:
+ *             y *= sin(x)/x             # <<<<<<<<<<<<<<
+ *             x *= Q
+ *             n += 1
+ */
+      __pyx_t_2 = sin(__pyx_v_x);
+      if (unlikely(__pyx_v_x == 0)) {
+        PyErr_SetString(PyExc_ZeroDivisionError, "float division");
+        __PYX_ERR(0, 67, __pyx_L1_error)
+      }
+      __pyx_v_y = (__pyx_v_y * (__pyx_t_2 / __pyx_v_x));
+
+      /* "c_priors.pyx":68
+ *         while n < h:
+ *             y *= sin(x)/x
+ *             x *= Q             # <<<<<<<<<<<<<<
+ *             n += 1
+ *         return y
+ */
+      __pyx_v_x = (__pyx_v_x * __pyx_v_Q);
+
+      /* "c_priors.pyx":69
+ *             y *= sin(x)/x
+ *             x *= Q
+ *             n += 1             # <<<<<<<<<<<<<<
+ *         return y
+ */
+      __pyx_v_n = (__pyx_v_n + 1);
+    }
+
+    /* "c_priors.pyx":70
+ *             x *= Q
+ *             n += 1
+ *         return y             # <<<<<<<<<<<<<<
+ */
+    __Pyx_XDECREF(__pyx_r);
+    __pyx_t_3 = PyFloat_FromDouble(__pyx_v_y); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 70, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __pyx_r = __pyx_t_3;
+    __pyx_t_3 = 0;
+    goto __pyx_L0;
+  }
 
   /* "c_priors.pyx":58
  *             cbar-cbar_le)* _theta(cbar_ge-cbar)
@@ -2181,6 +2224,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
 
 static CYTHON_SMALL_CODE int __Pyx_InitGlobals(void) {
   if (__Pyx_InitStrings(__pyx_string_tab) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  __pyx_int_1 = PyInt_FromLong(1); if (unlikely(!__pyx_int_1)) __PYX_ERR(0, 1, __pyx_L1_error)
   return 0;
   __pyx_L1_error:;
   return -1;

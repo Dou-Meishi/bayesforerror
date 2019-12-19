@@ -1069,30 +1069,44 @@ static PyObject *__pyx_pf_8c_priors_12_A_delta_if_cbar_f(CYTHON_UNUSED PyObject 
 </pre><pre class="cython line score-0">&#xA0;<span class="">59</span>:                        <span class="n">double</span> <span class="n">cbar</span><span class="p">,</span> <span class="n">double</span> <span class="n">Q</span><span class="p">,</span> <span class="nb">int</span> <span class="n">h</span><span class="p">,</span> <span class="nb">int</span> <span class="n">k</span><span class="p">):</span></pre>
 <pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">60</span>:     <span class="k">cdef</span> <span class="kt">double</span> <span class="nf">y</span> <span class="o">=</span> <span class="n">cos</span><span class="p">(</span><span class="n">t</span><span class="o">*</span><span class="n">delta</span><span class="p">)</span></pre>
 <pre class='cython code score-0 '>  __pyx_v_y = cos((__pyx_v_t * __pyx_v_delta));
-</pre><pre class="cython line score-0">&#xA0;<span class="">61</span>:     <span class="k">cdef</span> <span class="kt">double</span> <span class="nf">x</span></pre>
-<pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">62</span>:     <span class="k">cdef</span> <span class="kt">int</span> <span class="nf">n</span> <span class="o">=</span> <span class="n">k</span><span class="o">+</span><span class="mf">1</span></pre>
-<pre class='cython code score-0 '>  __pyx_v_n = (__pyx_v_k + 1);
-</pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">63</span>:     <span class="k">while</span> <span class="n">n</span> <span class="o">&lt;=</span> <span class="n">k</span><span class="o">+</span><span class="n">h</span><span class="p">:</span></pre>
-<pre class='cython code score-0 '>  while (1) {
-    __pyx_t_1 = ((__pyx_v_n &lt;= (__pyx_v_k + __pyx_v_h)) != 0);
-    if (!__pyx_t_1) break;
-</pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">64</span>:         <span class="n">x</span> <span class="o">=</span> <span class="n">Q</span><span class="o">**</span><span class="n">n</span> <span class="o">*</span><span class="n">t</span><span class="o">*</span><span class="n">cbar</span></pre>
-<pre class='cython code score-0 '>    __pyx_v_x = ((pow(__pyx_v_Q, ((double)__pyx_v_n)) * __pyx_v_t) * __pyx_v_cbar);
-</pre><pre class="cython line score-5" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">65</span>:         <span class="n">y</span> <span class="o">*=</span> <span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="n">x</span></pre>
-<pre class='cython code score-5 '>    __pyx_t_2 = sin(__pyx_v_x);
-    if (unlikely(__pyx_v_x == 0)) {
-      <span class='py_c_api'>PyErr_SetString</span>(PyExc_ZeroDivisionError, "float division");
-      <span class='error_goto'>__PYX_ERR(0, 65, __pyx_L1_error)</span>
-    }
-    __pyx_v_y = (__pyx_v_y * (__pyx_t_2 / __pyx_v_x));
-</pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">66</span>:         <span class="n">n</span> <span class="o">+=</span> <span class="mf">1</span></pre>
-<pre class='cython code score-0 '>    __pyx_v_n = (__pyx_v_n + 1);
+</pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">61</span>:     <span class="k">cdef</span> <span class="kt">double</span> <span class="nf">x</span> <span class="o">=</span> <span class="n">Q</span><span class="o">**</span><span class="p">(</span><span class="n">k</span><span class="o">+</span><span class="mf">1</span><span class="p">)</span><span class="o">*</span><span class="n">t</span><span class="o">*</span><span class="n">cbar</span></pre>
+<pre class='cython code score-0 '>  __pyx_v_x = ((pow(__pyx_v_Q, ((double)(__pyx_v_k + 1))) * __pyx_v_t) * __pyx_v_cbar);
+</pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">62</span>:     <span class="k">cdef</span> <span class="kt">int</span> <span class="nf">n</span> <span class="o">=</span> <span class="mf">0</span></pre>
+<pre class='cython code score-0 '>  __pyx_v_n = 0;
+</pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">63</span>:     <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="mf">0</span><span class="p">:</span></pre>
+<pre class='cython code score-0 '>  __pyx_t_1 = ((__pyx_v_x == 0.0) != 0);
+  if (__pyx_t_1) {
+/* … */
   }
-</pre><pre class="cython line score-6" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">67</span>:     <span class="k">return</span> <span class="n">y</span></pre>
-<pre class='cython code score-6 '>  <span class='pyx_macro_api'>__Pyx_XDECREF</span>(__pyx_r);
-  __pyx_t_3 = <span class='py_c_api'>PyFloat_FromDouble</span>(__pyx_v_y);<span class='error_goto'> if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 67, __pyx_L1_error)</span>
-  <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_3);
-  __pyx_r = __pyx_t_3;
-  __pyx_t_3 = 0;
-  goto __pyx_L0;
+</pre><pre class="cython line score-2" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">64</span>:         <span class="k">return</span> <span class="mf">1</span></pre>
+<pre class='cython code score-2 '>    <span class='pyx_macro_api'>__Pyx_XDECREF</span>(__pyx_r);
+    <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_int_1);
+    __pyx_r = __pyx_int_1;
+    goto __pyx_L0;
+</pre><pre class="cython line score-0">&#xA0;<span class="">65</span>:     <span class="k">else</span><span class="p">:</span></pre>
+<pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">66</span>:         <span class="k">while</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="n">h</span><span class="p">:</span></pre>
+<pre class='cython code score-0 '>  /*else*/ {
+    while (1) {
+      __pyx_t_1 = ((__pyx_v_n &lt; __pyx_v_h) != 0);
+      if (!__pyx_t_1) break;
+</pre><pre class="cython line score-5" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">67</span>:             <span class="n">y</span> <span class="o">*=</span> <span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="n">x</span></pre>
+<pre class='cython code score-5 '>      __pyx_t_2 = sin(__pyx_v_x);
+      if (unlikely(__pyx_v_x == 0)) {
+        <span class='py_c_api'>PyErr_SetString</span>(PyExc_ZeroDivisionError, "float division");
+        <span class='error_goto'>__PYX_ERR(0, 67, __pyx_L1_error)</span>
+      }
+      __pyx_v_y = (__pyx_v_y * (__pyx_t_2 / __pyx_v_x));
+</pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">68</span>:             <span class="n">x</span> <span class="o">*=</span> <span class="n">Q</span></pre>
+<pre class='cython code score-0 '>      __pyx_v_x = (__pyx_v_x * __pyx_v_Q);
+</pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">69</span>:             <span class="n">n</span> <span class="o">+=</span> <span class="mf">1</span></pre>
+<pre class='cython code score-0 '>      __pyx_v_n = (__pyx_v_n + 1);
+    }
+</pre><pre class="cython line score-6" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">70</span>:         <span class="k">return</span> <span class="n">y</span></pre>
+<pre class='cython code score-6 '>    <span class='pyx_macro_api'>__Pyx_XDECREF</span>(__pyx_r);
+    __pyx_t_3 = <span class='py_c_api'>PyFloat_FromDouble</span>(__pyx_v_y);<span class='error_goto'> if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 70, __pyx_L1_error)</span>
+    <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_3);
+    __pyx_r = __pyx_t_3;
+    __pyx_t_3 = 0;
+    goto __pyx_L0;
+  }
 </pre></div></body></html>

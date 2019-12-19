@@ -6,8 +6,10 @@
 
 import os, logging
 import numpy as np
-from scipy.integrate import trapz
 from matplotlib import pyplot as plt
+from scipy.integrate import trapz
+from scipy.optimize import root_scalar
+from scipy.interpolate import CubicSpline 
 
 _args = {}
 
@@ -37,14 +39,14 @@ def calc(pr_delta, mode='relax'):
 
     if mode == 'refine':
         step = (x[1] - x[0])/2
-        logger.info('Calculating new {} points...'.format(len(x)))
+        logger.info('Refine. Calculating new {} points...'.format(len(x)))
         new_x = x + step
         new_y = [pr_delta(xx) for xx in new_x]
-        x = np.stack((x, new_x),axis=-1).reshape(-1)[:-1]
-        y = np.stack((y, new_y),axis=-1).reshape(-1)[:-1]
+        x = np.stack((x, new_x),axis=-1).reshape(-1)
+        y = np.stack((y, new_y),axis=-1).reshape(-1)
     elif mode == 'extend':
         step = x[-1] - x[0] + x[1] - x[0]
-        logger.info('Calculating new {} points...'.format(len(x)))
+        logger.info('Extend. Calculating new {} points...'.format(len(x)))
         new_x = x + step
         new_y = [pr_delta(xx) for xx in new_x]
         x = np.hstack((x, new_x))
@@ -58,6 +60,7 @@ def calc(pr_delta, mode='relax'):
         logger.warning('Data dir not found! Create it and saving data...')
         os.mkdir(_args['datapath'])
 
+    logger.info(str(_args))
     np.save(_args['fn_x'], x)
     np.save(_args['fn_y'], y)
     return x, y
@@ -120,6 +123,30 @@ def get_dkp(p, *, depth, err, pr_delta):
  search.".format(intv[0], intv[1]))
         return intv[0]
 
+
+def interpolate_dkp(p, *, pr_delta, depth, max_length):
+    logger = logging.getLogger('dmslog').getChild(__name__)
+    x, y = calc(pr_delta, 'relax')
+
+    for _ in range(depth):
+        if trapz(y,x)*2 < p:
+            logger.info("Integral on ({}, {}) is {}.".format(
+                x[0], x[-1], trapz(y,x)*2))
+            x, y = calc(pr_delta, 'extend')
+        else:
+            break
+    while len(x) < max_length:
+        x, y = calc(pr_delta, 'refine')
+
+    try:
+        cs = CubicSpline(x, y, bc_type='clamped', extrapolate=False)
+    except ValueError as e:
+        logger.error("Max depth reached.")
+        raise e
+    else:
+        dkp = root_scalar(lambda t: p*.5 - cs.integrate(0,t),
+                  method='brentq', bracket=[0, x[-1]]).root
+    return dkp
 
 
 def plot_pr(*, show=False):

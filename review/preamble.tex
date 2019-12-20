@@ -110,7 +110,6 @@
 \renewcommand\arraystretch{1.3} % baselineskip
 
 %% symbol expression
-\def\mdis{\displaystyle}
 \def\dmsdif{\,\mathrm{d}}
 \newcommand*{\dmsNN}{\char"2115\relax}
 \newcommand*{\dmsbar}[1]{\mkern1.5mu\overline{\mkern-1.5mu#1\mkern-1.5mu}\mkern1.5mu}
@@ -118,44 +117,11 @@
 \usepackage{tcolorbox}
 \tcbuselibrary{listings, breakable, xparse}
 
-\DeclareTotalTCBox{\inlinecode}{O{python} v}
-{verbatim,colback=white,colframe=white}
-{\lstinline[language=#1, keywordstyle=\color{cyan}\bfseries]^#2^}
-
-%% \DeclareTCBInputListing{\inputcode}{O{[latex]tex} m !O{}}{
-%%  fonttitle=\bfseries, 
-%%  colback=yellow!5,colframe=yellow!50!black,listing only,
-%%  before skip=0.5cm, after skip=0.5cm,
-%%  breakable,left=10mm, listing inputencoding=utf8,
-%%  listing file={#2}, listing options={
-%%         language={#1},
-%%         basicstyle=\scriptsize\ttfamily, 
-%%         keywordstyle=\color{orange},       % core keywords
-%%         keywordstyle={[2]\color{purple}}, % built-ins
-%%         stringstyle=\color{teal}\ttfamily,
-%%         commentstyle=\color{gray},
-%%         upquote=true,                      % requires textcomp
-%%         lineskip=-2pt,
-%%         numbers=left,
-%%         numberstyle=\small\color{red!75!black}}, #3
-%% }
-
-%% \newtcblisting{mycode}[2][python]{%
-%%     fonttitle = \Large\bfseries,
-%%     colback=yellow!5,colframe=yellow!50!black,listing only,
-%%     before skip=0.5cm, after skip=0.5cm, 
-%%     breakable,left=10mm,title = #2,
-%%     listing options={
-%%         language=#1,
-%%         basicstyle=\normalsize\ttfamily, 
-%%         keywordstyle=\color{orange},       % core keywords
-%%         keywordstyle={[2]\color{purple}}, % built-ins
-%%         stringstyle=\color{teal}\ttfamily,
-%%         commentstyle=\color{gray},
-%%         upquote=true,                      % requires textcomp
-%%         lineskip=-2pt,
-%%         numbers=left,
-%%         numberstyle=\small\color{red!75!black}
-%% }}
+\DeclareTotalTCBox{\dmscode}{O{python} v}
+{verbatim, nobeforeafter,tcbox raise base,arc=0pt,outer arc=0pt,
+top=0pt,bottom=0pt,left=0mm,right=0mm,
+leftrule=0pt,rightrule=0pt,toprule=0.0mm,bottomrule=0.0mm,boxsep=0.5mm,
+colupper=violet, colback=white,colframe=white}
+{\lstinline[language=#1]^#2^}
 
 \endinput

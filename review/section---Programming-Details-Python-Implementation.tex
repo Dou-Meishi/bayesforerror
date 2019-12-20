@@ -1,0 +1,85 @@
+%% -*- coding: utf-8 -*-
+
+\section{Programming Details Python Implementation}
+下面介绍如何在给定 priors pdfs 和 $\dmsccck$ 后计算截断误差概率分布函数
+$\dmspr(\Delta|\dmsccck)$.
+
+PRC2015 中主要讨论 Set A${}_\epsilon^{(1)}$, A$_\epsilon$, C$_\epsilon$, B，
+$\epsilon $ 下标表示先验概率分布函数存在归一化问题，
+中间变量 $\dmscbar$ 取值设定在 $(\epsilon,1/\epsilon)$ 之间，
+计算时取 $\epsilon=0.001$。
+${}^{(1)}$ 上标表示采用首项近似 $\Delta\approx c_{k+1}Q^{k+1}$。
+没有上标表示做近似 $\Delta\approx\Delta^{(h)}, h=4$ (PRC2017 中取 $h=10$).
+
+对 Set A${}_\epsilon^{(1)}$ 和 C${}_\epsilon$，
+误差概率分布函数 $\dmspr(\Delta|\dmsccck)$ 均有解析形式。
+对前者，
+从 $\dmspr(\Delta|\dmsccck)$ 解析表达式 Eq~\eqref{eq:PrDeltaSetA}
+直接积分可得 $\dmsdkp$ 的隐式表达式 Eq~\eqref{eq:DOBSetA}，
+然后可以通过一般的非线性方程求根的办法计算，
+比如二分法.
+\texttt{NumPy} 提供的 \dmscode{root_scalar()} 是一个通用的求根函数，
+二分法就是其实现方法之一。
+对后者，
+Eq~\eqref{eq:52} 到 \eqref{eq:55} 给出了 $\dmspr(\Delta|\dmsccck)$
+的解析表达式，
+$\dmsdkp$ 可通过积分形式的表达式 Eq~\eqref{eq:DOB} 求出。
+同样，
+这也是一个非线性方程求根的问题，
+也可以使用二分法。
+考虑到这里导数容易求得，
+而且根唯一，
+还可以使用牛顿法。
+\dmscode{root_scalar()} 同样实现了牛顿法。
+
+对于 Set A${}_\epsilon$，
+误差概率分布函数 $\dmspr(\Delta|\dmsccck)$ 只有积分形式表达式
+Eq~\eqref{eq:PrDeltah}，
+其中 $\dmspr_h(\Delta|\dmscbar)$ 由一个振荡型的反常积分
+Eq~\eqref{eq:PrhABC} 给出。
+\texttt{NumPy} 提供的通用积分函数 \dmscode{quad()}
+可以处理这种积分区间为无穷的反常积分。
+Eq~\eqref{eq:PrDeltah} 分母中的积分可以解析求出
+\begin{equation}
+  \int_{\dmscbar_<}^{\dmscbar_>}
+  \dmspr(\dmsccck|\dmscbar)\dmspr(\dmscbar)\dmsdif\dmscbar
+  = \frac{1}{n_c} \frac{1}{2^{n_c}\ln\dmscbar_>/\dmscbar_<}
+  \biggl(\frac{1}{\dmscbar^{n_c}}\biggr)\dmsvat[\bigg]{\dmscbar_>}{
+    \dmscbar_{(k)}},\qquad
+  \dmscbar_{(k)}\equiv\max\{|c_0|,|c_1|,\ldots,|c_n|\}
+\end{equation}
+相应地，
+Eq~\eqref{eq:PrDeltah} 分子中的积分可以写为
+\begin{equation}
+  \int_{\dmscbar_<}^{\dmscbar_>}\dmspr_h^{\textrm{(A)}}(\Delta|\dmscbar) 
+  \dmspr(\dmsccck|\dmscbar)\dmspr(\dmscbar)\dmsdif\dmscbar
+  = \frac{1}{2^{n_c}\ln\dmscbar_>/\dmscbar_<}
+  \int_{\dmscbar_{(k)}}^{\dmscbar_>}\dmspr_h^{\textrm{(A)}}(\Delta|\dmscbar)
+  \frac{\dmsdif\dmscbar}{\dmscbar^{n_c+1}}
+\end{equation}
+
+Set B${}_\epsilon$ 与 Set A${}_\epsilon$ 处理方法类似，
+也是直接计算 Eq~\eqref{eq:PrDeltah} 得到分布函数 $\dmspr(\Delta|\dmsccck)$.
+Eq~\eqref{eq:PrDeltah} 分子分母中的积分分别为 ($\sigma=1.0$)
+\begin{equation}
+  \begin{split}
+  \int_{\dmscbar_<}^{\dmscbar_>}\dmspr_h^{\textrm{(A)}}(\Delta|\dmscbar) 
+  \dmspr(\dmsccck|\dmscbar)\dmspr(\dmscbar)\dmsdif\dmscbar
+  = \frac{1}{2^{n_c}\sqrt{2\pi}} \int_{\dmscbar_{(k)}}^{\dmscbar_>}
+  \dmspr_h^{\textrm{(B)}}(\Delta|\dmsccck)\frac{
+  \exp\bigl[-(\ln \dmscbar)^2/2\bigr]}{\dmscbar^{n_c+1}}\dmsdif\dmscbar
+  \\
+  \dmscbar_{(k)}\equiv\max\{|c_0|,|c_1|,\ldots,|c_n|\}
+  \end{split}
+\end{equation}
+\begin{equation}
+  \begin{split}
+  \int_{\dmscbar_<}^{\dmscbar_>}
+  \dmspr(\dmsccck|\dmscbar)\dmspr(\dmscbar)\dmsdif\dmscbar
+  = \frac{e^{n_c^2/2}}{2^{n_c+1}}\bigl[\dmserfc(a)-\dmserfc(b)\bigr],\qquad
+  \dmserfc(x)\equiv\frac{2}{\sqrt{\pi}}\int_x^\inftye^{-t^2}\dmsdif t
+  \\
+  a\equiv(\ln\dmscbar_{(k)}+n_c)/\sqrt{2},\quad
+  b\equiv(\ln\dmscbar_>+n_c)/\sqrt{2}
+  \end{split}
+\end{equation}

@@ -66,7 +66,9 @@ def ini_log():
 
 def main():
     ini_log()
-    
+    logger = logging.getLogger('dmslog').getChild(__name__)
+    logger.info("Main program start.")
+
     for p in [.68]:
         print('\n{:.0%} DOB:'.format(p))
         for data in dataIV:
@@ -75,7 +77,6 @@ def main():
             print(res_fmt.format(*tab9(p, data, 'C')))
             print(res_fmt.format(*tab9(p, data, 'B')))
 
-    logger = logging.getLogger('dmslog').getChild(__name__)
     logger.info("Main programe finished.")
     return
 

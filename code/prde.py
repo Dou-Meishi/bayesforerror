@@ -5,9 +5,9 @@
 
 import logging
 import numpy as np
-from numpy import sqrt, pi
+from numpy import sqrt, pi, exp, log
 from scipy.integrate import quad, nquad
-from scipy.special import gamma, gammaincc
+from scipy.special import gamma, gammaincc, erf, erfc
 import c_priors as priors       # write with Cython
 
 cbar_le = .001
@@ -25,37 +25,22 @@ def setting_args(*, Q, ccck, k=2, n_c=3, h=4, **kw):
     return
 
 
-def _A_delta_if_cbar(delta, cbar):
-    '''pr(Delta|cbar). See PRC2017 Eq. (A4).'''
-    def f(t):
-        return priors._A_delta_if_cbar_f(t,delta, cbar,
-            _args['Q'], _args['h'], _args['k'])
-    res, _ = quad(f, 0, np.inf, limit=limit)
-    return res/np.pi
-
-
 def pr_delta_A(delta):
     '''pr(Delta|ccck) for Set A. See PRC2017 Eq. (6).'''
     def _delta_if_cbar(cbar):
-        # return _A_delta_if_cbar(delta, cbar)
         res, _ = nquad(priors._A_delta_if_cbar_f,
                       [[0, np.inf]],
                       args=[delta, cbar,
                             _args['Q'], _args['h'], _args['k']],
                       opts={'limit': limit})
         return res/np.pi
-    def _ccck_if_cbar(cbar):
-        y = 1
-        ccck = np.array(_args['ccck'])
-        for cn in ccck[ccck.nonzero()]:
-            y *= priors._pr_cn_if_cbar_A(cn, cbar)
-        return y
+    ccck = np.array(_args['ccck'])
+    cbar_k = np.amax(np.abs(ccck[ccck.nonzero()]))
+
     numerator, _ = quad(lambda cbar:_delta_if_cbar(
-        cbar)*_ccck_if_cbar(cbar)*priors._pr_cbar_A(cbar),
-                        cbar_le, cbar_ge, limit=limit)
-    denominator, _ = quad(lambda cbar:_ccck_if_cbar(cbar
-    )*priors._pr_cbar_A(cbar), cbar_le, cbar_ge, limit=limit)
-    res = numerator/denominator
+        cbar)/cbar**(_args['n_c']+1), cbar_k, cbar_ge, limit=limit)
+    denominator = 1/cbar_k**_args['n_c'] - 1/cbar_ge**_args['n_c']
+    res = numerator/denominator*_args['n_c']
     logger = logging.getLogger('dmslog').getChild(__name__)
     logger.debug('delta: {}\npr: {}'.format(delta,res))
     return res
@@ -70,18 +55,15 @@ def pr_delta_B(delta):
                              _args['Q'], _args['h'], _args['k']],
                        opts={'limit': limit})
         return res/np.pi
-    def _ccck_if_cbar(cbar):
-        y = 1
-        ccck = np.array(_args['ccck'])
-        for cn in ccck[ccck.nonzero()]:
-            y *= priors._pr_cn_if_cbar_B(cn, cbar)
-        return y
+    ccck = np.array(_args['ccck'])
+    cbar_k = np.amax(np.abs(ccck[ccck.nonzero()]))
     numerator, _ = quad(lambda cbar:_delta_if_cbar(
-        cbar)*_ccck_if_cbar(cbar)*priors._pr_cbar_B(cbar),
-                        cbar_le, cbar_ge, limit=limit)
-    denominator, _ = quad(lambda cbar:_ccck_if_cbar(cbar
-    )*priors._pr_cbar_B(cbar), cbar_le, cbar_ge, limit=limit)
-    res = numerator/denominator
+        cbar)*priors._weight(cbar,_args['n_c']),
+                        cbar_k, cbar_ge, limit=limit)
+    denominator = (erfc((log(cbar_k)+_args['n_c'])/sqrt(2)) -
+                   erfc((log(cbar_ge)+_args['n_c'])/sqrt(2)))
+    res = numerator/denominator*sqrt(2/pi)*exp(
+        -.5*_args['n_c']*_args['n_c'])
     logger = logging.getLogger('dmslog').getChild(__name__)
     logger.debug('delta: {}\npr: {}'.format(delta, res))
     return res
@@ -103,14 +85,39 @@ def pr_delta_C(delta):
     return numerator/(denominator*q*sqrt(2*pi))
 
 
+def test_denominator(ccck, delta, n_c):
+    ccck = np.array(ccck)
+    def _ccck_if_cbar(cbar):
+        y = 1
+        for cn in ccck[ccck.nonzero()]:
+            y *= priors._pr_cn_if_cbar_B(cn, cbar)
+        return y
+    denominator, _ = quad(lambda cbar:_ccck_if_cbar(cbar
+    )*priors._pr_cbar_B(cbar), cbar_le, cbar_ge, limit=limit)
+    print(denominator)
+
+    cbar_k = np.amax(np.abs(ccck[ccck.nonzero()]))
+    denominator, _ = quad(lambda t: sqrt(2)*exp(-t**2+.5*n_c*n_c),
+                          (n_c+log(cbar_k))/sqrt(2),
+                          (n_c+log(cbar_ge))/sqrt(2),
+                          limit=limit)
+    denominator /= 2**n_c * sqrt(2*pi)
+    print(denominator)
+
+    denominator = exp(.5*n_c*n_c)/2**(n_c+1)*(
+        erfc((log(cbar_k)+n_c)/sqrt(2)) -
+        erfc((log(cbar_ge)+n_c)/sqrt(2)))
+    print(denominator)
+    return
+
+
 def main():
-    args = {'SET': 'Cc', 'Q': .5}
-    import plpr
-    setting_args(**args)
-    plpr.setting_args(**args)
-    # plpr.calc(pr_delta_C, 'refine')
-    print(plpr.find_width(.95, err=.001))
-    plpr.plot_pr(show=True)
+    Q = .511
+    k = 5
+    n_c = 5
+    ccck = [1., .0, .11, 1.44, .25, -.41]
+    delta = Q**(k+1)
+    test_denominator(ccck, delta, n_c)
     return
 
 

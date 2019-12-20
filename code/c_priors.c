@@ -1050,11 +1050,13 @@ static const char __pyx_k_t[] = "t";
 static const char __pyx_k_x[] = "x";
 static const char __pyx_k_y[] = "y";
 static const char __pyx_k_cn[] = "cn";
+static const char __pyx_k_n_c[] = "n_c";
 static const char __pyx_k_cbar[] = "cbar";
 static const char __pyx_k_main[] = "__main__";
 static const char __pyx_k_name[] = "__name__";
 static const char __pyx_k_test[] = "__test__";
 static const char __pyx_k_delta[] = "delta";
+static const char __pyx_k_weight[] = "_weight";
 static const char __pyx_k_c_priors[] = "c_priors";
 static const char __pyx_k_pr_cbar_A[] = "_pr_cbar_A";
 static const char __pyx_k_pr_cbar_B[] = "_pr_cbar_B";
@@ -1077,6 +1079,7 @@ static PyObject *__pyx_n_s_h;
 static PyObject *__pyx_n_s_k;
 static PyObject *__pyx_n_s_main;
 static PyObject *__pyx_n_s_n;
+static PyObject *__pyx_n_s_n_c;
 static PyObject *__pyx_n_s_name;
 static PyObject *__pyx_n_s_pr_cbar_A;
 static PyObject *__pyx_n_s_pr_cbar_B;
@@ -1086,6 +1089,7 @@ static PyObject *__pyx_n_s_pr_cn_if_cbar_B;
 static PyObject *__pyx_n_s_pr_cn_if_cbar_C;
 static PyObject *__pyx_n_s_t;
 static PyObject *__pyx_n_s_test;
+static PyObject *__pyx_n_s_weight;
 static PyObject *__pyx_n_s_x;
 static PyObject *__pyx_n_s_y;
 static PyObject *__pyx_pf_8c_priors__pr_cn_if_cbar_A(CYTHON_UNUSED PyObject *__pyx_self, double __pyx_v_cn, double __pyx_v_cbar); /* proto */
@@ -1095,6 +1099,7 @@ static PyObject *__pyx_pf_8c_priors_6_pr_cbar_B(CYTHON_UNUSED PyObject *__pyx_se
 static PyObject *__pyx_pf_8c_priors_8_pr_cn_if_cbar_C(CYTHON_UNUSED PyObject *__pyx_self, double __pyx_v_cn, double __pyx_v_cbar); /* proto */
 static PyObject *__pyx_pf_8c_priors_10_pr_cbar_C(CYTHON_UNUSED PyObject *__pyx_self, double __pyx_v_cbar); /* proto */
 static PyObject *__pyx_pf_8c_priors_12_A_delta_if_cbar_f(CYTHON_UNUSED PyObject *__pyx_self, double __pyx_v_t, double __pyx_v_delta, double __pyx_v_cbar, double __pyx_v_Q, int __pyx_v_h, int __pyx_v_k); /* proto */
+static PyObject *__pyx_pf_8c_priors_14_weight(CYTHON_UNUSED PyObject *__pyx_self, double __pyx_v_cbar, int __pyx_v_n_c); /* proto */
 static PyObject *__pyx_int_1;
 static PyObject *__pyx_tuple_;
 static PyObject *__pyx_tuple__3;
@@ -1103,6 +1108,7 @@ static PyObject *__pyx_tuple__7;
 static PyObject *__pyx_tuple__9;
 static PyObject *__pyx_tuple__11;
 static PyObject *__pyx_tuple__13;
+static PyObject *__pyx_tuple__15;
 static PyObject *__pyx_codeobj__2;
 static PyObject *__pyx_codeobj__4;
 static PyObject *__pyx_codeobj__6;
@@ -1110,6 +1116,7 @@ static PyObject *__pyx_codeobj__8;
 static PyObject *__pyx_codeobj__10;
 static PyObject *__pyx_codeobj__12;
 static PyObject *__pyx_codeobj__14;
+static PyObject *__pyx_codeobj__16;
 /* Late includes */
 
 /* "c_priors.pyx":31
@@ -2017,6 +2024,7 @@ static PyObject *__pyx_pf_8c_priors_12_A_delta_if_cbar_f(CYTHON_UNUSED PyObject 
  *             x *= Q
  *             n += 1             # <<<<<<<<<<<<<<
  *         return y
+ * 
  */
       __pyx_v_n = (__pyx_v_n + 1);
     }
@@ -2025,6 +2033,8 @@ static PyObject *__pyx_pf_8c_priors_12_A_delta_if_cbar_f(CYTHON_UNUSED PyObject 
  *             x *= Q
  *             n += 1
  *         return y             # <<<<<<<<<<<<<<
+ * 
+ * def _weight(double cbar, int n_c):
  */
     __Pyx_XDECREF(__pyx_r);
     __pyx_t_3 = PyFloat_FromDouble(__pyx_v_y); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 70, __pyx_L1_error)
@@ -2046,6 +2056,119 @@ static PyObject *__pyx_pf_8c_priors_12_A_delta_if_cbar_f(CYTHON_UNUSED PyObject 
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_3);
   __Pyx_AddTraceback("c_priors._A_delta_if_cbar_f", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "c_priors.pyx":72
+ *         return y
+ * 
+ * def _weight(double cbar, int n_c):             # <<<<<<<<<<<<<<
+ *     return exp(-.5*log(cbar)*log(cbar))/cbar**(n_c+1)
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_8c_priors_15_weight(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyMethodDef __pyx_mdef_8c_priors_15_weight = {"_weight", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_8c_priors_15_weight, METH_VARARGS|METH_KEYWORDS, 0};
+static PyObject *__pyx_pw_8c_priors_15_weight(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+  double __pyx_v_cbar;
+  int __pyx_v_n_c;
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("_weight (wrapper)", 0);
+  {
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_cbar,&__pyx_n_s_n_c,0};
+    PyObject* values[2] = {0,0};
+    if (unlikely(__pyx_kwds)) {
+      Py_ssize_t kw_args;
+      const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
+      switch (pos_args) {
+        case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+        CYTHON_FALLTHROUGH;
+        case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+        CYTHON_FALLTHROUGH;
+        case  0: break;
+        default: goto __pyx_L5_argtuple_error;
+      }
+      kw_args = PyDict_Size(__pyx_kwds);
+      switch (pos_args) {
+        case  0:
+        if (likely((values[0] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_cbar)) != 0)) kw_args--;
+        else goto __pyx_L5_argtuple_error;
+        CYTHON_FALLTHROUGH;
+        case  1:
+        if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_n_c)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("_weight", 1, 2, 2, 1); __PYX_ERR(0, 72, __pyx_L3_error)
+        }
+      }
+      if (unlikely(kw_args > 0)) {
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "_weight") < 0)) __PYX_ERR(0, 72, __pyx_L3_error)
+      }
+    } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
+      goto __pyx_L5_argtuple_error;
+    } else {
+      values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+      values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+    }
+    __pyx_v_cbar = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_cbar == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 72, __pyx_L3_error)
+    __pyx_v_n_c = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_n_c == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 72, __pyx_L3_error)
+  }
+  goto __pyx_L4_argument_unpacking_done;
+  __pyx_L5_argtuple_error:;
+  __Pyx_RaiseArgtupleInvalid("_weight", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 72, __pyx_L3_error)
+  __pyx_L3_error:;
+  __Pyx_AddTraceback("c_priors._weight", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_RefNannyFinishContext();
+  return NULL;
+  __pyx_L4_argument_unpacking_done:;
+  __pyx_r = __pyx_pf_8c_priors_14_weight(__pyx_self, __pyx_v_cbar, __pyx_v_n_c);
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_8c_priors_14_weight(CYTHON_UNUSED PyObject *__pyx_self, double __pyx_v_cbar, int __pyx_v_n_c) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  double __pyx_t_1;
+  double __pyx_t_2;
+  PyObject *__pyx_t_3 = NULL;
+  __Pyx_RefNannySetupContext("_weight", 0);
+
+  /* "c_priors.pyx":73
+ * 
+ * def _weight(double cbar, int n_c):
+ *     return exp(-.5*log(cbar)*log(cbar))/cbar**(n_c+1)             # <<<<<<<<<<<<<<
+ */
+  __Pyx_XDECREF(__pyx_r);
+  __pyx_t_1 = exp(((-.5 * log(__pyx_v_cbar)) * log(__pyx_v_cbar)));
+  __pyx_t_2 = pow(__pyx_v_cbar, ((double)(__pyx_v_n_c + 1)));
+  if (unlikely(__pyx_t_2 == 0)) {
+    PyErr_SetString(PyExc_ZeroDivisionError, "float division");
+    __PYX_ERR(0, 73, __pyx_L1_error)
+  }
+  __pyx_t_3 = PyFloat_FromDouble((__pyx_t_1 / __pyx_t_2)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 73, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __pyx_r = __pyx_t_3;
+  __pyx_t_3 = 0;
+  goto __pyx_L0;
+
+  /* "c_priors.pyx":72
+ *         return y
+ * 
+ * def _weight(double cbar, int n_c):             # <<<<<<<<<<<<<<
+ *     return exp(-.5*log(cbar)*log(cbar))/cbar**(n_c+1)
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_3);
+  __Pyx_AddTraceback("c_priors._weight", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -2111,6 +2234,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_k, __pyx_k_k, sizeof(__pyx_k_k), 0, 0, 1, 1},
   {&__pyx_n_s_main, __pyx_k_main, sizeof(__pyx_k_main), 0, 0, 1, 1},
   {&__pyx_n_s_n, __pyx_k_n, sizeof(__pyx_k_n), 0, 0, 1, 1},
+  {&__pyx_n_s_n_c, __pyx_k_n_c, sizeof(__pyx_k_n_c), 0, 0, 1, 1},
   {&__pyx_n_s_name, __pyx_k_name, sizeof(__pyx_k_name), 0, 0, 1, 1},
   {&__pyx_n_s_pr_cbar_A, __pyx_k_pr_cbar_A, sizeof(__pyx_k_pr_cbar_A), 0, 0, 1, 1},
   {&__pyx_n_s_pr_cbar_B, __pyx_k_pr_cbar_B, sizeof(__pyx_k_pr_cbar_B), 0, 0, 1, 1},
@@ -2120,6 +2244,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_pr_cn_if_cbar_C, __pyx_k_pr_cn_if_cbar_C, sizeof(__pyx_k_pr_cn_if_cbar_C), 0, 0, 1, 1},
   {&__pyx_n_s_t, __pyx_k_t, sizeof(__pyx_k_t), 0, 0, 1, 1},
   {&__pyx_n_s_test, __pyx_k_test, sizeof(__pyx_k_test), 0, 0, 1, 1},
+  {&__pyx_n_s_weight, __pyx_k_weight, sizeof(__pyx_k_weight), 0, 0, 1, 1},
   {&__pyx_n_s_x, __pyx_k_x, sizeof(__pyx_k_x), 0, 0, 1, 1},
   {&__pyx_n_s_y, __pyx_k_y, sizeof(__pyx_k_y), 0, 0, 1, 1},
   {0, 0, 0, 0, 0, 0, 0}
@@ -2215,6 +2340,17 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__13);
   __Pyx_GIVEREF(__pyx_tuple__13);
   __pyx_codeobj__14 = (PyObject*)__Pyx_PyCode_New(6, 0, 9, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__13, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_c_priors_pyx, __pyx_n_s_A_delta_if_cbar_f, 58, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__14)) __PYX_ERR(0, 58, __pyx_L1_error)
+
+  /* "c_priors.pyx":72
+ *         return y
+ * 
+ * def _weight(double cbar, int n_c):             # <<<<<<<<<<<<<<
+ *     return exp(-.5*log(cbar)*log(cbar))/cbar**(n_c+1)
+ */
+  __pyx_tuple__15 = PyTuple_Pack(2, __pyx_n_s_cbar, __pyx_n_s_n_c); if (unlikely(!__pyx_tuple__15)) __PYX_ERR(0, 72, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__15);
+  __Pyx_GIVEREF(__pyx_tuple__15);
+  __pyx_codeobj__16 = (PyObject*)__Pyx_PyCode_New(2, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__15, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_c_priors_pyx, __pyx_n_s_weight, 72, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__16)) __PYX_ERR(0, 72, __pyx_L1_error)
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -2627,6 +2763,17 @@ if (!__Pyx_RefNanny) {
   __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_8c_priors_13_A_delta_if_cbar_f, NULL, __pyx_n_s_c_priors); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 58, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_A_delta_if_cbar_f, __pyx_t_1) < 0) __PYX_ERR(0, 58, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "c_priors.pyx":72
+ *         return y
+ * 
+ * def _weight(double cbar, int n_c):             # <<<<<<<<<<<<<<
+ *     return exp(-.5*log(cbar)*log(cbar))/cbar**(n_c+1)
+ */
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_8c_priors_15_weight, NULL, __pyx_n_s_c_priors); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 72, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_weight, __pyx_t_1) < 0) __PYX_ERR(0, 72, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "c_priors.pyx":1

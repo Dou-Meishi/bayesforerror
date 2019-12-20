@@ -68,3 +68,6 @@ def _A_delta_if_cbar_f(double t, double delta,
             x *= Q
             n += 1
         return y
+
+def _weight(double cbar, int n_c):
+    return exp(-.5*log(cbar)*log(cbar))/cbar**(n_c+1)

@@ -5,25 +5,6 @@
 #+STARTUP: overview
 #+OPTIONS: tex:t
 
-+ ~review/~
-
-  目前主要是对文献 PRC2015 的笔记。
-  + ~preamble.tex~
-    
-    导言区：页面格式，字体选择，各种用途宏包的载入及配置。
-  + ~section---XXX.tex~
-
-    标题为 ~XXX~ 的内容。
-  + ~priors.tex~
-
-    Set A, B, C 对应概率分布函数的表格。
-  + ~tab2.tex~
-
-    ~code/tab2.py~ 的输出结果，与 PRC2015 TABLE. II 对应。
-  + ~Review.tex~
-    
-    正文区。
-
 + ~code/~
 
   目前主要是对文献 PRC2015 中数值计算结果的重复

@@ -5,10 +5,9 @@ from numpy import pi, sqrt, exp, log
 from scipy.integrate import nquad, quad
 from scipy.special import gamma, gammaincc
 
-import c_priors as priors       # written with Cython
+import priors
 
 cbar_le, cbar_ge = (.001, 1000)
-
 
 def prde_AB_cbar(delta, cbar, Q, h, k):
     i, _ = nquad(priors._A_delta_if_cbar_f, [[0, np.inf]],
@@ -59,34 +58,34 @@ def prde_C(delta, ccck, Q, h, k):
     return numerator/(denominator*q*sqrt(2*pi))
     
 
+prde = {'A': prde_A,
+        'B': prde_B,
+        'C': prde_C}
 
-def test():
-    # import matplotlib.pyplot as plt
+
+def test_prde():
+
     Q, h, k = (.5, 10, 2)
-    ccck = [1., 1., .1]
+    ccck = [1., .5, .1]
 
-    # delta = Q**(k+1)
-    # cbars = [10**(n) for n in np.linspace(-3, 4)]
-    # AB_cbar = [prde_AB_cbar(delta, cbar, Q, h, k) for cbar in cbars]
-
-    # plt.plot(cbars, AB_cbar, 'o')
-    # plt.xscale('log')
-    # plt.show()
+    import matplotlib.pyplot as plt
 
     deltas = np.linspace(0, 2*Q**(k+1))
     A = [prde_A(delta, ccck[1:], Q, h, k) for delta in deltas]
     B = [prde_B(delta, ccck[1:], Q, h, k) for delta in deltas]
     C = [prde_C(delta, ccck[1:], Q, h, k) for delta in deltas]
 
-    # plt.plot(deltas, A, 'o', label='Set A')
-    # plt.plot(deltas, B, 'o', label='Set B')
-    # plt.plot(deltas, C, 'o', label='Set C')
+
+    plt.plot(deltas, A, 'o', label='Set A')
+    plt.plot(deltas, B, 'o', label='Set B')
+    plt.plot(deltas, C, 'o', label='Set C')
     
-    # plt.legend()
-    # plt.show()
+    plt.legend()
+    plt.show()
     return
+
 
 
 if __name__ == '__main__':
     import cProfile
-    cProfile.run('test()', filename='prde.out')
+    cProfile.run('test_prde()', filename='prde.out')

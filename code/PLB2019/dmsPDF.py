@@ -99,23 +99,23 @@ def test_PrDelta():
     deltasB = np.linspace(0, 2*B.Q**(B.k+1))
     deltasC = np.linspace(0, 2*C.Q**(C.k+1))
 
-    # plt.plot(deltasA, [A(delta) for delta in deltasA], 'o', label=A.SET)
-    # plt.plot(deltasB, [B(delta) for delta in deltasB], 'o', label=B.SET)
-    # plt.plot(deltasC, [C(delta) for delta in deltasC], 'o', label=C.SET)
+    plt.plot(deltasA, [A(delta) for delta in deltasA], 'o', label=A.SET)
+    plt.plot(deltasB, [B(delta) for delta in deltasB], 'o', label=B.SET)
+    plt.plot(deltasC, [C(delta) for delta in deltasC], 'o', label=C.SET)
 
-    # plt.legend()
-    # plt.show()
+    plt.legend()
+    plt.show()
 
-    A = PrDelta(SET='A', Q=.511, c0ck=[1., .0, .11, 1.44, .25, -.41],
-                abcent_id=[1], h=4)
-    B = PrDelta(SET='B', Q=.511, c0ck=[1., .0, .11, 1.44, .25, -.41],
-                abcent_id=[1], h=4)
-    C = PrDelta(SET='C', Q=.511, c0ck=[1., .0, .11, 1.44, .25, -.41],
-                abcent_id=[1], h=4)
+    # A = PrDelta(SET='A', Q=.511, c0ck=[1., .0, .11, 1.44, .25, -.41],
+    #             abcent_id=[1], h=4)
+    # B = PrDelta(SET='B', Q=.511, c0ck=[1., .0, .11, 1.44, .25, -.41],
+    #             abcent_id=[1], h=4)
+    # C = PrDelta(SET='C', Q=.511, c0ck=[1., .0, .11, 1.44, .25, -.41],
+    #             abcent_id=[1], h=4)
 
-    print(A.basename, A.get_dkp(.95, method='newton'))
-    print(B.basename, B.get_dkp(.95, method='newton'))
-    print(C.basename, C.get_dkp(.95, method='newton'))
+    # print(A.basename, A.get_dkp(.95, method='newton'))
+    # print(B.basename, B.get_dkp(.95, method='newton'))
+    # print(C.basename, C.get_dkp(.95, method='newton'))
     return
 
 

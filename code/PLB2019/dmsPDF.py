@@ -64,8 +64,8 @@ class PrDelta(PDF):
     def __init__(self, SET, Q, c0ck, abcent_id, h=10):
         self.SET = SET
         self.Q = Q
-        self.c0ck = c0ck
-        self.abcent_id = abcent_id
+        self.c0ck = c0ck.copy()
+        self.abcent_id = abcent_id.copy()
         self.h = h
 
         self.k = len(c0ck) - 1
@@ -77,6 +77,16 @@ class PrDelta(PDF):
                                                   self.Q, self.h, self.k),
                          self.fmt.format(SET=SET, Q=self.Q,
                                          k=self.k, h=self.h))
+
+
+    def update_ck(self, ck1, abcent=False):
+        c0ck = self.c0ck.copy()
+        abcent_id = self.abcent_id.copy()
+
+        c0ck.append(ck1)
+        if abcent:
+            abcent_id.append(self.k+1)
+        return PrDelta(self.SET, self.Q, c0ck, abcent_id, self.h)
 
 
     def get_dkp(self, p, *, method):

@@ -4,7 +4,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-import prde, dmsPDF             # personal module
+import dmsPDF             # personal module
+
 
 def var_k():
     fn_fmt = dmsPDF.PDF.dirpath + '/' + "k-{k}_Q-{Q}"
@@ -17,8 +18,11 @@ def var_k():
         pdfA = dmsPDF.PrDelta('A', Q, c0ck[:k+1], abcent_id)
         pdfB = dmsPDF.PrDelta('B', Q, c0ck[:k+1], abcent_id)
         pdfC = dmsPDF.PrDelta('C', Q, c0ck[:k+1], abcent_id)
-        
         deltas = np.linspace(0, 2*pdfA.Q**(pdfA.k+1), 100)
+
+        ax.set_title("k: {}".format(k))
+        ax.set_xlabel("$\Delta$")
+        ax.set_ylabel("pr($\Delta$)")
         ax.plot(deltas, [pdfA(delta) for delta in deltas],
                 '-', label="Set {}".format(pdfA.SET))
         ax.plot(deltas, [pdfB(delta) for delta in deltas],
@@ -28,40 +32,16 @@ def var_k():
         ax.legend()
         return
 
-    plt.rcParams.update({"font.size": 20, "lines.linewidth": 2})
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12.8, 7.2))
+    # plt.rcParams.update({"font.size": 20, "lines.linewidth": 2})
+    fig, ((ax1, ax2),(ax3,ax4)) = plt.subplots(2, 2)
     fig.suptitle("Q: {}".format(Q))
     
-    k = 2
-    ax1.set_title("k: {}".format(k))
-    ax1.set_xlabel("$\Delta$")
-    ax1.set_ylabel("pr($\Delta$)")
-    _k_ax(ax1, k)
+    _k_ax(ax1, k=2)
+    _k_ax(ax2, k=3)
+    _k_ax(ax3, k=4)
+    _k_ax(ax4, k=5)
 
-    k = 3
-    ax2.set_title("k: {}".format(k))
-    ax2.set_xlabel("$\Delta$")
-    ax2.set_ylabel("pr($\Delta$)")
-    _k_ax(ax2, k)
-
-    fig.savefig(fn_fmt.format(k=23, Q=Q)+'.png')
-
-    ax1.clear()
-    ax2.clear()
-    
-    k = 4
-    ax1.set_title("k: {}".format(k))
-    ax1.set_xlabel("$\Delta$")
-    ax1.set_ylabel("pr($\Delta$)")
-    _k_ax(ax1, k)
-
-    k = 5
-    ax2.set_title("k: {}".format(k))
-    ax2.set_xlabel("$\Delta$")
-    ax2.set_ylabel("pr($\Delta$)")
-    _k_ax(ax2, k)
-
-    fig.savefig(fn_fmt.format(k=45, Q=Q)+'.png')
+    fig.savefig(fn_fmt.format(k=2345, Q=Q)+'.png')
     return
 
 

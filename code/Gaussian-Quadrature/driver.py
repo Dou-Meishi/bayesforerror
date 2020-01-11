@@ -43,19 +43,23 @@ class Probe(object):
 
 class InteDriver(object):
 
-    fmtstr = '\n'.join(["     integrand: {func_name}",
+    fmtstr = '\n'.join(["   integrand: {func_name}",
                "     interval: [{interval[0]}, {interval[1]}]",
                "    quad rule: {quad_name}",
                " n evaluation: {neval:9}     (total of {repeat} times)",
-               "time per call: {tmin:9.6f} sec (best of {repeat} times)",
-               "integral, err: {i:9.6f}, {e:9.6f}",
-               "          ref: {ii:9.6f}, {ee:9.6f}",
+               "time per call: {tmin:9.8f} sec (best of {repeat} times)",
+               "integral, err: {i:9.8f}, {e:9.8f}",
+               "          ref: {ii:9.8f}, {ee:9.8f}",
                "     add info: {add info}"])
 
 
-    def __init__(self, integrator):
+    def __init__(self, integrator, repeat=3):
         self.integrator = integrator
-        self.prb = Probe(repeat=3)
+        self.prb = Probe(repeat=repeat)
+
+
+    def __call__(self, *args, **kws):
+        return self.integrator(*args, **kws)
 
 
     def _test(self, func, interval, *args, **kws):
@@ -72,10 +76,10 @@ class InteDriver(object):
                  'add info': np.nan}
 
 
-    def test_x3(self):
-        def xto3(x): return x**3
-        odict = self._test(xto3, [0,1])
-        odict['ii'] = .25
+    def test_x29(self):
+        def xto29(x): return x**29
+        odict = self._test(xto29, [0,1])
+        odict['ii'] = .1/3
         odict['ee'] = abs(odict['i'] - odict['ii'])
         return self.fmtstr.format(**odict)
 
@@ -92,6 +96,18 @@ class InteDriver(object):
         odict['ii'] = 1
         odict['ee'] = abs(odict['i'] - odict['ii'])
         return self.fmtstr.format(**odict)
+
+
+    def runtest(self):
+        for attr in dir(self):
+            if not attr.startswith('test_'):
+                continue
+
+            f = getattr(self, attr)
+            if callable(f):
+                print('\n', f())
+
+        return
 
 
 
@@ -115,7 +131,7 @@ class InteSincDriver(InteDriver):
 
         
     def test_1(self):
-        delta, am = (0, [1., 1/3, 1/5, 1/7])
+        delta, am = (0, [1., 1/2, 1/4, 1/8, 1/16, 1/32])
         odict = self._test(self.get_cos_sinc(delta, am), [0,np.inf])
         odict['ii'] = pi/2
         odict['ee'] = abs(odict['i'] - odict['ii'])
@@ -127,19 +143,10 @@ class InteSincDriver(InteDriver):
 def main():
     from scipy.integrate import quad, nquad
     def mquad(func, interval, *args, **kws):
-        return nquad(func, [interval], *args, **kws)
+        return nquad(func, [interval], *args, **kws, opts={'limit':50})
     
-
     mq_driver = InteSincDriver(mquad)
-
-    for f in dir(mq_driver):
-        if not f.startswith('test_'):
-            continue
-
-        func = getattr(mq_driver, f)
-        if callable(func):
-            print('\n', func())
-        
+    mq_driver.runtest()
     return
 
 

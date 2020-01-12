@@ -4,6 +4,7 @@
 
 import numpy as np
 import time, functools
+from math import factorial
 from numpy import pi, sin, cos, exp, log
 
 
@@ -73,7 +74,7 @@ class InteDriver(object):
                      'tmin': np.amin(self.prb.tlist),
                    'repeat': self.prb.repeat,
                 'i': i, 'e': e, 'ii': np.nan, 'ee': np.nan,
-                 'add info': np.nan}
+                 'add info': None}
 
 
     def test_x29(self):
@@ -120,11 +121,33 @@ class InteSincDriver(InteDriver):
             return cos(delta*t) * np.prod(np.sinc(t*am/pi))
         return cos_sinc
 
+    @staticmethod
+    def borw_cos_sinc(delta, am):
+        a = np.array(am)
+        h = len(a)
+        s = [-1 for _ in range(h)]
+        asum = 0
+        
+        for _ in range(1<<h):
+            c = np.prod(s)
+            b = np.dot(s, a)
+            asum += c*(b+delta)**(h-1)*np.sign(b+delta)
+
+            for i in range(h):
+                s[i] = -s[i]    # update s
+                if s[i] == 1:
+                    break
+
+        asum /= (2<<h) * factorial(h-1) * np.prod(a)
+        return asum*pi
+            
+        
+
 
     def test_0(self):
         delta, am = (0, [1., 1.])
         odict = self._test(self.get_cos_sinc(delta, am), [0,np.inf])
-        odict['ii'] = pi/2
+        odict['ii'] = self.borw_cos_sinc(delta,am)
         odict['ee'] = abs(odict['i'] - odict['ii'])
         odict['add info'] = "delta: {:.3f} am: {}".format(delta,str(am))
         return self.fmtstr.format(**odict)
@@ -133,10 +156,33 @@ class InteSincDriver(InteDriver):
     def test_1(self):
         delta, am = (0, [1., 1/2, 1/4, 1/8, 1/16, 1/32])
         odict = self._test(self.get_cos_sinc(delta, am), [0,np.inf])
-        odict['ii'] = pi/2
+        odict['ii'] = self.borw_cos_sinc(delta,am)
         odict['ee'] = abs(odict['i'] - odict['ii'])
         odict['add info'] = "delta: {:.3f} am: {}".format(delta,str(am))
         return self.fmtstr.format(**odict)
+
+
+    def test_2(self):
+        delta, am = (np.random.rand(), np.random.rand(10)+.001)
+        odict = self._test(self.get_cos_sinc(delta, am), [0,np.inf])
+        odict['ii'] = self.borw_cos_sinc(delta,am)
+        odict['ee'] = abs(odict['i'] - odict['ii'])
+        odict['add info'] = "delta: {:.3f} am: {}".format(delta, str(am))
+        return self.fmtstr.format(**odict)
+
+
+    def test_3(self, cbar_scale=10):
+        delta = np.random.rand()*2*pi
+        cbar  = np.random.rand()*cbar_scale + .01
+        Q     = np.random.rand()*.5 + .5
+        k     = int(np.random.rand()*4+2)
+        am = [cbar*Q**(k+1+m) for m in range(10)]
+        odict = self._test(self.get_cos_sinc(delta, am), [0,np.inf])
+        odict['ii'] = self.borw_cos_sinc(delta,am)
+        odict['ee'] = abs(odict['i'] - odict['ii'])
+        odict['add info'] = "delta: {:.3f} cbar: {:.3f} Q: {:.3f} k: {} am: {}".format(delta, cbar, Q, k, str(am))
+        return self.fmtstr.format(**odict)
+
 
 
 

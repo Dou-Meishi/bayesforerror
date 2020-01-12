@@ -38,6 +38,67 @@ class GaussQuad(object):
                                3.075324199611726835462839357720442e-02,
                                3.075324199611726835462839357720442e-02]
                       },
+             'GL30': { 'xk': [+5.147184255531769583302521316672257e-02,
+                              -5.147184255531769583302521316672257e-02,
+                              +1.538699136085835469637946727432559e-01,
+                              -1.538699136085835469637946727432559e-01,
+                              +2.546369261678898464398051298178051e-01,
+                              -2.546369261678898464398051298178051e-01,
+                              +3.527047255308781134710372070893739e-01,
+                              -3.527047255308781134710372070893739e-01,
+                              +4.470337695380891767806099003228540e-01,
+                              -4.470337695380891767806099003228540e-01,
+                              +5.366241481420198992641697933110728e-01,
+                              -5.366241481420198992641697933110728e-01,
+                              +6.205261829892428611404775564311893e-01,
+                              -6.205261829892428611404775564311893e-01,
+                              +6.978504947933157969322923880266401e-01,
+                              -6.978504947933157969322923880266401e-01,
+                              +7.677774321048261949179773409745031e-01,
+                              -7.677774321048261949179773409745031e-01,
+                              +8.295657623827683974428981197325019e-01,
+                              -8.295657623827683974428981197325019e-01,
+                              +8.825605357920526815431164625302256e-01,
+                              -8.825605357920526815431164625302256e-01,
+                              +9.262000474292743258793242770804740e-01,
+                              -9.262000474292743258793242770804740e-01,
+                              +9.600218649683075122168710255817977e-01,
+                              -9.600218649683075122168710255817977e-01,
+                              +9.836681232797472099700325816056628e-01,
+                              -9.836681232797472099700325816056628e-01,
+                              +9.968934840746495402716300509186953e-01,
+                              -9.968934840746495402716300509186953e-01],
+                       'ak': [1.028526528935588403412856367054150e-01,
+                              1.028526528935588403412856367054150e-01,
+                              1.017623897484055045964289521685540e-01,
+                              1.017623897484055045964289521685540e-01,
+                              9.959342058679526706278028210356948e-02,
+                              9.959342058679526706278028210356948e-02,
+                              9.636873717464425963946862635180987e-02,
+                              9.636873717464425963946862635180987e-02,
+                              9.212252223778612871763270708761877e-02,
+                              9.212252223778612871763270708761877e-02,
+                              8.689978720108297980238753071512570e-02,
+                              8.689978720108297980238753071512570e-02,
+                              8.075589522942021535469493846052973e-02,
+                              8.075589522942021535469493846052973e-02,
+                              7.375597473770520626824385002219073e-02,
+                              7.375597473770520626824385002219073e-02,
+                              6.597422988218049512812851511596236e-02,
+                              6.597422988218049512812851511596236e-02,
+                              5.749315621761906648172168940205613e-02,
+                              5.749315621761906648172168940205613e-02,
+                              4.840267283059405290293814042280752e-02,
+                              4.840267283059405290293814042280752e-02,
+                              3.879919256962704959680193644634769e-02,
+                              3.879919256962704959680193644634769e-02,
+                              2.878470788332336934971917961129204e-02,
+                              2.878470788332336934971917961129204e-02,
+                              1.846646831109095914230213191204727e-02,
+                              1.846646831109095914230213191204727e-02,
+                              7.968192496166605615465883474673622e-03,
+                              7.968192496166605615465883474673622e-03]
+                       },
              'GK15': {'Gxk': [ 0.0,
                               +4.058451513773971669066064120769615e-01,
                               -4.058451513773971669066064120769615e-01,
@@ -175,40 +236,56 @@ class GaussQuad(object):
         '''Non-adaptive Gauss-Legendre Quadrature for bounded interval.'''
         ak = cls.XkAks[quadname]['ak']
         xk = cls.XkAks[quadname]['xk']
-        (a, b), accsum1, accsum2 = (interval, 0, 0)
+        (a, b), accsum, accsum2 = (interval, 0, 0)
 
         for i in range(len(ak)):
-            accsum1 += ak[i] * f(xk[i]*(b-a)/2 + (b+a)/2)
-            accsum2 += ak[i] *(f(xk[i]*(b-a)/4 + (b+3*a)/4) + f(xk[i]*(b-a)/4 + (3*b+a)/4))
+            accsum += ak[i] * f(xk[i]*(b-a)/2 + (b+a)/2)
+            # accsum2 += ak[i] *(f(xk[i]*(b-a)/4 + (b+3*a)/4) + f(xk[i]*(b-a)/4 + (3*b+a)/4))
 
-        accsum1 *= (b-a)/2
-        accsum2 *= (b-a)/4
-        return accsum2, abs(accsum2-accsum1)
+        return accsum*(b-a)/2, np.nan
+
 
 
     @classmethod
     def _QNGK_b(cls, f, interval, *, quadname):
         '''Non-adaptive Gauss-Kronrod Quadrature for bounded interval.'''
-        gak = cls.XkAks[quadname]['Gak']
         kak = cls.XkAks[quadname]['Kak']
-        gxk = cls.XkAks[quadname]['Gxk']
-        kxk = cls.XkAks[quadname]['Kxk']
-        (a, b), g_sum, k_sum = (interval, 0, 0)
+        gak = cls.XkAks[quadname]['Gak']
+        a, b = interval
 
-        for i in range(len(gak)):
-            g_sum += gak[i] * f(gxk[i]*(b-a)/2 + (b+a)/2)
+        kyk = [f(x*(b-a)/2 + (b+a)/2) for x in cls.XkAks[quadname]['Kxk']]
+        # TRICKS!! GAUSS NODES IS NESTED IN KRONROD NODES
+        gyk = [kyk[i*2] for i in range(len(gak)-1, -1, -2)] \
+              + [kyk[i*2+1] for i in range(len(gak)-2, -1, -2)]
 
-        for i in range(len(kak)):
-            k_sum += kak[i] * f(kxk[i]*(b-a)/2 + (b+a)/2)
+        k_sum = np.dot(kak, kyk)
+        g_sum = np.dot(gak, gyk)
+
+        # gak = cls.XkAks[quadname]['Gak']
+        # kak = cls.XkAks[quadname]['Kak']
+        # gxk = cls.XkAks[quadname]['Gxk']
+        # kxk = cls.XkAks[quadname]['Kxk']
+        # (a, b), g_sum, k_sum = (interval, 0, 0)
+
+        # for i in range(len(gak)):
+        #     g_sum += gak[i] * f(gxk[i]*(b-a)/2 + (b+a)/2)
+
+        # for i in range(len(kak)):
+        #     k_sum += kak[i] * f(kxk[i]*(b-a)/2 + (b+a)/2)
 
         return k_sum*(b-a)/2, abs(k_sum-g_sum)*(b-a)/2
 
 
     @classmethod
-    def QNGL(cls, f, interval, *, quadname='GL15'):
+    def QNGL(cls, f, interval, *, division=50, quadname='GL15'):
         '''Non-adaptive Gauss-Legendre Quadrature.'''
-        _f, _interval = cls._trans_signature(f, interval)
-        return cls._QNGL_b(_f, _interval, quadname=quadname)
+        _f, (_a, _b) = cls._trans_signature(f, interval)
+        _h = (_b - _a)/division
+        _itvs = [[_a+_h*i, _a+_h*(i+1)] for i in range(division)]
+        _itgs = [cls._QNGL_b(_f,_interval,quadname=quadname)[0]
+                             for _interval in _itvs]
+
+        return sum(_itgs), np.nan
 
 
     @classmethod
@@ -270,19 +347,34 @@ def main():
     from driver import InteDriver, InteSincDriver
     from scipy.integrate import nquad
 
-    def gquad(*args, **kws):
-        return GaussQuad.QAGK(*args, **kws, limit=1, quadname='GK21')
-    def mquad(f, interval, *args, **kws):
-        return nquad(f, [interval], *args, **kws, opts={'limit':1})
+    def gkquad(*args, **kws):
+        return GaussQuad.QAGK(*args, **kws, limit=20, quadname='GK15')
+    def glquad(*args, **kws):
+        return GaussQuad.QNGL(*args, **kws, division=20, quadname='GL30')
+    def spquad(f, interval, *args, **kws):
+        return nquad(f, [interval], *args, **kws, opts={'limit':20})
 
-    gq_driver = InteSincDriver(gquad, repeat=30)
-    gq_driver.runtest()
+    gl_driver = InteSincDriver(glquad, repeat=30)
+    # gl_driver.runtest()
+    print('\n', gl_driver.test_1())
+    # print('\n', gl_driver.test_2())
+    # print('\n', gl_driver.test_3())
 
-    mq_driver = InteSincDriver(mquad, repeat=30)
-    mq_driver.runtest()
+    gk_driver = InteSincDriver(gkquad, repeat=30)
+    # gk_driver.runtest()
+    print('\n', gk_driver.test_1())
+    # print('\n', gk_driver.test_2())
+    # print('\n', gk_driver.test_3())
+
+    mq_driver = InteSincDriver(spquad, repeat=30)
+    # mq_driver.runtest()
+    print('\n', mq_driver.test_1())
+    # print('\n', mq_driver.test_2())
+    # print('\n', mq_driver.test_3())
 
     return
 
 
 if __name__ == '__main__':
-    main()
+    import cProfile
+    cProfile.run('main()', filename='gaussquad.profile')

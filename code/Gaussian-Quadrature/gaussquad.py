@@ -356,21 +356,21 @@ def main():
 
     gl_driver = InteSincDriver(glquad, repeat=30)
     # gl_driver.runtest()
-    print('\n', gl_driver.test_1())
+    # print('\n', gl_driver.test_1())
     # print('\n', gl_driver.test_2())
-    # print('\n', gl_driver.test_3())
+    print('\n', gl_driver.test_3())
 
     gk_driver = InteSincDriver(gkquad, repeat=30)
     # gk_driver.runtest()
-    print('\n', gk_driver.test_1())
+    # print('\n', gk_driver.test_1())
     # print('\n', gk_driver.test_2())
-    # print('\n', gk_driver.test_3())
+    print('\n', gk_driver.test_3())
 
     mq_driver = InteSincDriver(spquad, repeat=30)
     # mq_driver.runtest()
-    print('\n', mq_driver.test_1())
+    # print('\n', mq_driver.test_1())
     # print('\n', mq_driver.test_2())
-    # print('\n', mq_driver.test_3())
+    print('\n', mq_driver.test_3())
 
     return
 

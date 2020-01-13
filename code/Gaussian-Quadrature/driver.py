@@ -123,15 +123,21 @@ class InteSincDriver(InteDriver):
 
     @staticmethod
     def borw_cos_sinc(delta, am):
+        d = delta
         a = np.array(am)
         h = len(a)
-        s = [-1 for _ in range(h)]
+
+        if abs(d) > sum(a):
+            return 0
+        else:
+            pass
+
         asum = 0
-        
+        s = [-1 for _ in range(h)]
         for _ in range(1<<h):
             c = np.prod(s)
             b = np.dot(s, a)
-            asum += c*(b+delta)**(h-1)*np.sign(b+delta)
+            asum += c*(b+d)**(h-1)*np.sign(b+d)
 
             for i in range(h):
                 s[i] = -s[i]    # update s
@@ -141,8 +147,6 @@ class InteSincDriver(InteDriver):
         asum /= (2<<h) * factorial(h-1) * np.prod(a)
         return asum*pi
             
-        
-
 
     def test_0(self):
         delta, am = (0, [1., 1.])
@@ -176,9 +180,11 @@ class InteSincDriver(InteDriver):
         cbar  = np.random.rand()*cbar_scale + .01
         Q     = np.random.rand()*.5 + .5
         k     = int(np.random.rand()*4+2)
-        am = [cbar*Q**(k+1+m) for m in range(10)]
+        h     = 10
+        am = [cbar*Q**(k+1+m) for m in range(h)]
         odict = self._test(self.get_cos_sinc(delta, am), [0,np.inf])
-        odict['ii'] = self.borw_cos_sinc(delta,am)
+
+        odict['ii'] = self.borw_cos_sinc(delta/(cbar*Q**(k+1)), [Q**m for m in range(h)])/(cbar*Q**(k+1))
         odict['ee'] = abs(odict['i'] - odict['ii'])
         odict['add info'] = "delta: {:.3f} cbar: {:.3f} Q: {:.3f} k: {} am: {}".format(delta, cbar, Q, k, str(am))
         return self.fmtstr.format(**odict)

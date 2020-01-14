@@ -7,7 +7,7 @@ from numpy import pi, sin, cos, exp, log
 from scipy.integrate import nquad
 from scipy.special import gamma as spgamma # factorial
 
-from gaussquad import GaussQuad as GQ 
+from gaussquad import GaussQuad as GQ
 
 
 def get_cos_sinc(delta, am):
@@ -41,8 +41,6 @@ def bwPrde(delta, cbar, Q, k, h):
     
     if abs(d) > sum(a):
         return 0
-    else:
-        pass
 
     asum = 0
     s = [-1 for _ in range(h)]
@@ -74,14 +72,13 @@ def main():
     fig, ax = plt.subplots()
     ax.plot(delta, [spPrde(d, cbar, Q, k, h) for d in delta],
             'x', label='Scipy Quad')
-    # ax.plot(delta, [gkPrde(d, cbar, Q, k, h) for d in delta],
-    #         'o', label='Gauss Kronord')
-    # ax.plot(delta, [glPrde(d, cbar, Q, k, h) for d in delta],
-    #         '^', label='Gauss Legendre')
+    ax.plot(delta, [gkPrde(d, cbar, Q, k, h) for d in delta],
+            'o', label='Gauss Kronord')
+    ax.plot(delta, [glPrde(d, cbar, Q, k, h) for d in delta],
+            '^', label='Gauss Legendre')
     ax.plot(delta, [bwPrde(d, cbar, Q, k, h) for d in delta],
             'd', label='Borwein Integral')
     ax.legend()
-
     plt.show()
 
     return

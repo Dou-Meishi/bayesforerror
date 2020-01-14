@@ -36,7 +36,8 @@ class Probe(object):
             for i in range(self.repeat):
                 ts = time.time()
                 res = func(*args, **kws)
-                self.tlist[i] = time.time() - ts
+                te = time.time()
+                self.tlist[i] = te - ts
             return res
         return new_func
 
@@ -129,8 +130,6 @@ class InteSincDriver(InteDriver):
 
         if abs(d) > sum(a):
             return 0
-        else:
-            pass
 
         asum = 0
         s = [-1 for _ in range(h)]
@@ -176,7 +175,7 @@ class InteSincDriver(InteDriver):
 
 
     def test_3(self, cbar_scale=10):
-        delta = np.random.rand()*2*pi
+        delta = np.random.rand()
         cbar  = np.random.rand()*cbar_scale + .01
         Q     = np.random.rand()*.5 + .5
         k     = int(np.random.rand()*4+2)

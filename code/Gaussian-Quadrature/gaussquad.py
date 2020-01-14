@@ -311,7 +311,7 @@ class GaussQuad(object):
         lop_count = 1
 
         while e > eps and lop_count < limit:
-            k = np.argmax(e)
+            k = np.argmax(err_stack)
             ii, ee = (itg_stack.pop(k), err_stack.pop(k))
             a, b = itv_stack.pop(k)
             m = (a+b)/2
@@ -355,22 +355,13 @@ def main():
         return nquad(f, [interval], *args, **kws, opts={'limit':20})
 
     gl_driver = InteSincDriver(glquad, repeat=30)
-    # gl_driver.runtest()
-    # print('\n', gl_driver.test_1())
-    # print('\n', gl_driver.test_2())
-    print('\n', gl_driver.test_3())
+    gl_driver.runtest()
 
     gk_driver = InteSincDriver(gkquad, repeat=30)
-    # gk_driver.runtest()
-    # print('\n', gk_driver.test_1())
-    # print('\n', gk_driver.test_2())
-    print('\n', gk_driver.test_3())
+    gk_driver.runtest()
 
     mq_driver = InteSincDriver(spquad, repeat=30)
-    # mq_driver.runtest()
-    # print('\n', mq_driver.test_1())
-    # print('\n', mq_driver.test_2())
-    print('\n', mq_driver.test_3())
+    mq_driver.runtest()
 
     return
 
